@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AP2MD CONNECT PRO — Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blue: #0b5ed7;
+            --blue-dark: #063b8c;
+            --green: #198754;
+            --green-dark: #11643d;
+            --white: #ffffff;
+            --light: #f4f7fb;
+            --border: #e2e8f0;
+            --text: #1f2937;
+            --muted: #64748b;
+            --danger: #dc3545;
+            --warning: #f59e0b;
+            --shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--light);
+            color: var(--text);
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 255px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--blue-dark), var(--blue));
+            color: white;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .brand {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,.15);
+        }
+
+        .brand img {
+            width: 105px;
+            height: 75px;
+            object-fit: contain;
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .brand h2 {
+            font-size: 17px;
+            margin-top: 10px;
+        }
+
+        .brand p {
+            font-size: 11px;
+            opacity: .85;
+            margin-top: 4px;
+        }
+
+        .menu {
+            padding: 15px 10px;
+        }
+
+        .menu-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: .6;
+            padding: 12px 12px 6px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 3px;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: rgba(255,255,255,.17);
+        }
+
+        .menu-icon {
+            width: 23px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 255px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+            color: var(--blue-dark);
+        }
+
+        .topbar small {
+            color: var(--muted);
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--green);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        /* =========================
+           ALERT
+        ========================= */
+
+        .data-status {
+            background: white;
+            border-left: 5px solid var(--warning);
+            padding: 15px 18px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .data-status strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .data-status span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* =========================
+           FILTERS
+        ========================= */
+
+        .filters {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .filters h3 {
+            margin-bottom: 15px;
+            color: var(--blue-dark);
+            font-size: 16px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .filter select,
+        .filter input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: white;
+            color: var(--text);
+        }
+
+        /* =========================
+           KPI
+        ========================= */
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .kpi {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--blue);
+        }
+
+        .kpi:nth-child(2) {
+            border-top-color: var(--green);
+        }
+
+        .kpi:nth-child(3) {
+            border-top-color: var(--warning);
+        }
+
+        .kpi:nth-child(4) {
+            border-top-color: #6f42c1;
+        }
+
+        .kpi-title {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 8px;
+            color: var(--blue-dark);
+        }
+
+        .kpi-note {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0 14px;
+        }
+
+        .section-title h2 {
+            font-size: 18px;
+            color: var(--blue-dark);
+        }
+
+        .section-title span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           CHARTS
+        ========================= */
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            min-height: 300px;
+        }
+
+        .chart-card h3 {
+            font-size: 15px;
+            color: var(--blue-dark);
+            margin-bottom: 15px;
+        }
+
+        .chart-placeholder {
+            height: 220px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--muted);
+            padding: 20px;
+        }
+
+        /* =========================
+           PROJECT
+        ========================= */
+
+        .project-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .project-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .project-head h3 {
+            color: var(--blue-dark);
+            margin-bottom: 7px;
+        }
+
+        .project-head p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status {
+            background: #e8f5ee;
+            color: var(--green-dark);
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            white-space: nowrap;
+            height: fit-content;
+        }
+
+        .progress-area {
+            margin-top: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #e9eef5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            padding: 13px 15px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--blue-dark);
+        }
+
+        td.empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px;
+        }
+
+        /* =========================
+           MODULES
+        ========================= */
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .module {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text);
+            border-left: 4px solid var(--blue);
+            transition: .2s;
+        }
+
+        .module:hover {
+            transform: translateY(-3px);
+        }
+
+        .module:nth-child(2) {
+            border-left-color: var(--green);
+        }
+
+        .module:nth-child(3) {
+            border-left-color: var(--warning);
+        }
+
+        .module:nth-child(4) {
+            border-left-color: #6f42c1;
+        }
+
+        .module-icon {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .module h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .module p {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            margin-top: 40px;
+            background: white;
+            border-top: 1px solid var(--border);
+            padding: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        .mobile-menu {
+            display: none;
+            border: none;
+            background: var(--blue);
+            color: white;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 18px;
+        }
+
+        @media (max-width: 1100px) {
+            .kpi-grid,
+            .module-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: .3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .topbar h1 {
+                font-size: 16px;
+            }
+
+            .profile {
+                display: none;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .kpi-grid,
+            .module-grid,
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-head {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <img src="assets/logo-ap2md-officiel.png"
+             alt="Logo officiel AP2MD"
+             onerror="this.style.display='none';">
+
+        <h2>AP2MD CONNECT PRO</h2>
+        <p>Plateforme institutionnelle</p>
+
+    </div>
+
+    <nav class="menu">
+
+        <div class="menu-title">Pilotage</div>
+
+        <a href="dashboard.html" class="active">
+            <span class="menu-icon">📊</span>
+            Dashboard
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📁</span>
+            Projets
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">👥</span>
+            Groupements
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">🧑‍🤝‍🧑</span>
+            Bénéficiaires
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📅</span>
+            Activités
+        </a>
+
+        <div class="menu-title">Suivi & Évaluation</div>
+
+        <a href="#">
+            <span class="menu-icon">🎯</span>
+            Indicateurs & S&E
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📥</span>
+            Données Kobo
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📈</span>
+            Analyses
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">⚠️</span>
+            Alertes
+        </a>
+
+        <div class="menu-title">Gestion</div>
+
+        <a href="#">
+            <span class="menu-icon">📄</span>
+            Rapports
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📚</span>
+            Documents
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">💰</span>
+            Budget
+        </a>
+
+        <div class="menu-title">Communication</div>
+
+        <a href="#">
+            <span class="menu-icon">📰</span>
+            Publications
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📸</span>
+            Médias
+        </a>
+
+        <a href="#">
+            <span class="menu-icon">📆</span>
+            Événements
+        </a>
+
+        <div class="menu-title">Formation</div>
+
+        <a href="#">
+            <span class="menu-icon">🎓</span>
+            AP2MD Academy
+        </a>
+
+        <div class="menu-title">Administration</div>
+
+        <a href="#">
+            <span class="menu-icon">⚙️</span>
+            Administration
+        </a>
+
+    </nav>
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <header class="topbar">
+
+        <div style="display:flex;align-items:center;gap:12px;">
+
+            <button class="mobile-menu" onclick="toggleSidebar()">
+                ☰
+            </button>
+
+            <div>
+                <h1>Tableau de bord</h1>
+                <small>AP2MD-Douké CONNECT PRO</small>
+            </div>
+
+        </div>
+
+        <div class="profile">
+
+            <div>
+                <strong>AP2MD</strong><br>
+                <small>Suivi & Évaluation</small>
+            </div>
+
+            <div class="avatar">
+                A
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <section class="content">
+
+        <!-- DATA STATUS -->
+
+        <div class="data-status">
+
+            <strong>ℹ️ État des données</strong>
+
+            <span>
+                Aucune donnée opérationnelle n'est encore connectée.
+                Les indicateurs et graphiques seront alimentés automatiquement
+                à partir des données réelles de Supabase/Kobo.
+            </span>
+
+        </div>
+
+
+        <!-- FILTERS -->
+
+        <div class="filters">
+
+            <h3>🔎 Filtres du tableau de bord</h3>
+
+            <div class="filter-grid">
+
+                <div class="filter">
+                    <select id="filterProject">
+                        <option value="">Tous les projets</option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <select id="filterZone">
+                        <option value="">Toutes les zones</option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <select id="filterGroupement">
+                        <option value="">Tous les groupements</option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <input type="date" id="filterDate">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- KPI -->
+
+        <div class="kpi-grid">
+
+            <div class="kpi">
+                <div class="kpi-title">Projets</div>
+                <div class="kpi-value" id="kpiProjects">0</div>
+                <div class="kpi-note">Projets enregistrés</div>
+            </div>
+
+            <div class="kpi">
+                <div class="kpi-title">Bénéficiaires</div>
+                <div class="kpi-value" id="kpiBeneficiaries">0</div>
+                <div class="kpi-note">Données réelles</div>
+            </div>
+
+            <div class="kpi">
+                <div class="kpi-title">Activités</div>
+                <div class="kpi-value" id="kpiActivities">0</div>
+                <div class="kpi-note">Activités enregistrées</div>
+            </div>
+
+            <div class="kpi">
+                <div class="kpi-title">Indicateurs</div>
+                <div class="kpi-value" id="kpiIndicators">0</div>
+                <div class="kpi-note">Indicateurs de suivi</div>
+            </div>
+
+        </div>
+
+
+        <!-- GRAPHIQUES -->
+
+        <div class="section-title">
+            <h2>📊 Analyse des données</h2>
+            <span>Les graphiques utiliseront uniquement les données disponibles</span>
+        </div>
+
+        <div class="chart-grid">
+
+            <div class="chart-card">
+
+                <h3>📈 Évolution des indicateurs</h3>
+
+                <div class="chart-placeholder" id="indicatorChart">
+
+                    <div>
+                        <strong>Aucune donnée disponible</strong>
+                        <br><br>
+                        Le graphique apparaîtra lorsque les données
+                        des indicateurs seront connectées.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <h3>👥 Répartition des bénéficiaires</h3>
+
+                <div class="chart-placeholder" id="beneficiaryChart">
+
+                    <div>
+                        <strong>Aucune donnée disponible</strong>
+                        <br><br>
+                        Les données seront affichées après
+                        connexion de la base.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT -->
+
+        <div class="section-title">
+
+            <h2>📁 Suivi des projets</h2>
+
+            <span>Progression globale</span>
+
+        </div>
+
+        <div class="project-card">
+
+            <div class="project-head">
+
+                <div>
+
+                    <h3>Aucun projet connecté</h3>
+
+                    <p>
+                        Les projets seront affichés automatiquement
+                        après connexion à la base de données.
+                    </p>
+
+                </div>
+
+                <span class="status">
+                    En attente de données
+                </span>
+
+            </div>
+
+            <div class="progress-area">
+
+                <div class="progress-label">
+
+                    <span>Progression</span>
+
+                    <strong>0%</strong>
+
+                </div>
+
+                <div class="progress">
+
+                    <div class="progress-bar"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE GROUPEMENTS -->
+
+        <div class="section-title">
+
+            <h2>👥 Suivi des groupements</h2>
+
+            <span>Situation actuelle</span>
+
+        </div>
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Groupement</th>
+                        <th>Zone</th>
+                        <th>Membres</th>
+                        <th>Femmes</th>
+                        <th>Hommes</th>
+                        <th>Statut</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="groupementsTable">
+
+                    <tr>
+                        <td colspan="6" class="empty">
+                            Aucune donnée de groupement disponible.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- INDICATORS -->
+
+        <div class="section-title">
+
+            <h2>🎯 Suivi des indicateurs</h2>
+
+            <span>Baseline — Cible — Réalisation</span>
+
+        </div>
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Indicateur</th>
+                        <th>Baseline</th>
+                        <th>Cible</th>
+                        <th>Réalisation</th>
+                        <th>Taux</th>
+                        <th>Statut</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="indicatorsTable">
+
+                    <tr>
+                        <td colspan="6" class="empty">
+                            Aucun indicateur disponible.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- MODULES -->
+
+        <div class="section-title">
+
+            <h2>🚀 Modules AP2MD CONNECT PRO</h2>
+
+            <span>Architecture fonctionnelle</span>
+
+        </div>
+
+        <div class="module-grid">
+
+            <a href="#" class="module">
+
+                <div class="module-icon">📁</div>
+
+                <h3>Gestion des projets</h3>
+
+                <p>
+                    Projets, objectifs, résultats, activités,
+                    indicateurs, budget et partenaires.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">🎯</div>
+
+                <h3>Suivi & Évaluation</h3>
+
+                <p>
+                    Indicateurs, cibles, réalisations,
+                    taux, tendances et alertes.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">📥</div>
+
+                <h3>Kobo & Données</h3>
+
+                <p>
+                    Importation, synchronisation,
+                    contrôle qualité et exploitation.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">📊</div>
+
+                <h3>Analyses</h3>
+
+                <p>
+                    Tableaux, graphiques, classements,
+                    tendances et synthèses.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">📄</div>
+
+                <h3>Rapports</h3>
+
+                <p>
+                    Rapports de mission, S&E,
+                    activités et projets.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">💰</div>
+
+                <h3>Budget</h3>
+
+                <p>
+                    Suivi budgétaire et financier
+                    des projets.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">📢</div>
+
+                <h3>Communication</h3>
+
+                <p>
+                    Publications, photos, vidéos,
+                    événements et actualités.
+                </p>
+
+            </a>
+
+
+            <a href="#" class="module">
+
+                <div class="module-icon">🎓</div>
+
+                <h3>AP2MD Academy</h3>
+
+                <p>
+                    Formations, documents,
+                    vidéos, quiz et évaluations.
+                </p>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        <strong>AP2MD-Douké CONNECT PRO</strong><br>
+
+        Plateforme institutionnelle de gestion,
+        suivi-évaluation, données et communication.
+
+        <br><br>
+
+        Département Informatique — ONG AP2MD-Douké<br>
+
+        Réginald KOYAKELA « Le Miséricordieux »
+
+        <br><br>
+
+        Cette plateforme numérique a été conçue et développée
+        avec la grâce de l’IDM — Interminable Divine Miséricorde.
+
+        <br><br>
+
+        © <span id="year"></span> AP2MD-Douké. Tous droits réservés.
+
+    </footer>
+
+</main>
+
+
+<script>
+
+    /* =========================
+       ANNÉE AUTOMATIQUE
+    ========================= */
+
+    document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+
+    /* =========================
+       MENU MOBILE
+    ========================= */
+
+    function toggleSidebar() {
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        sidebar.classList.toggle("open");
+
+    }
+
+
+    /* =========================
+       FILTRES
+    ========================= */
+
+    const filters = [
+        "filterProject",
+        "filterZone",
+        "filterGroupement",
+        "filterDate"
+    ];
+
+    filters.forEach(function(id) {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+
+            element.addEventListener("change", function() {
+
+                console.log(
+                    "Filtre modifié :",
+                    id,
+                    element.value
+                );
+
+                /*
+                 * La connexion Supabase sera ajoutée
+                 * lors de la phase Base de données.
+                 *
+                 * Aucun résultat fictif n'est généré.
+                 */
+
+            });
+
+        }
+
+    });
+
+
+    /* =========================
+       PREPARATION DES KPI
+    ========================= */
+
+    const dashboardData = {
+
+        projects: 0,
+
+        beneficiaries: 0,
+
+        activities: 0,
+
+        indicators: 0
+
+    };
+
+
+    function updateKpis() {
+
+        document.getElementById("kpiProjects")
+            .textContent = dashboardData.projects;
+
+        document.getElementById("kpiBeneficiaries")
+            .textContent = dashboardData.beneficiaries;
+
+        document.getElementById("kpiActivities")
+            .textContent = dashboardData.activities;
+
+        document.getElementById("kpiIndicators")
+            .textContent = dashboardData.indicators;
+
+    }
+
+
+    updateKpis();
+
+
+    /* =========================
+       PREPARATION GRAPHIQUES
+    ========================= */
+
+    function prepareCharts() {
+
+        console.log(
+            "Zone des graphiques prête pour les données Supabase/Kobo."
+        );
+
+    }
+
+
+    prepareCharts();
+
+
+    /* =========================
+       SECURITE CONTRE LES
+       DONNEES FICTIVES
+    ========================= */
+
+    console.log(
+        "AP2MD CONNECT PRO : dashboard initialisé sans données fictives."
+    );
+
+</script>
+
+</body>
+</html>
