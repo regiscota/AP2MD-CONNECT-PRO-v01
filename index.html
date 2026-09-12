@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AP2MD CONNECT PRO — Plateforme institutionnelle</title>
+
+<style>
+:root{
+    --blue:#075985;
+    --blue-dark:#063b7a;
+    --blue-light:#e0f2fe;
+    --green:#15803d;
+    --green-light:#dcfce7;
+    --white:#fff;
+    --bg:#f5f8fc;
+    --text:#172033;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --shadow:0 10px 30px rgba(15,23,42,.08);
+    --radius:16px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:72px;
+    background:rgba(255,255,255,.97);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 3px 15px rgba(0,0,0,.05);
+}
+
+.header-inner{
+    max-width:1250px;
+    height:100%;
+    margin:auto;
+    padding:0 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-box{
+    width:54px;
+    height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.logo-box img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:contain;
+    object-position:center;
+}
+
+.brand-name{
+    display:flex;
+    flex-direction:column;
+}
+
+.brand-name strong{
+    color:var(--blue);
+    font-size:18px;
+    letter-spacing:.4px;
+}
+
+.brand-name span{
+    color:var(--green);
+    font-size:11px;
+    font-weight:bold;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.header-btn{
+    border:1px solid var(--border);
+    background:#fff;
+    color:var(--blue-dark);
+    padding:9px 14px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    background:
+        linear-gradient(135deg,#eaf5ff 0%,#fff 50%,#eefbf2 100%);
+    padding:75px 22px;
+    border-bottom:1px solid var(--border);
+}
+
+.hero-inner{
+    max-width:1250px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:60px;
+    align-items:center;
+}
+
+.hero-label{
+    color:var(--green);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    color:var(--blue-dark);
+    font-size:clamp(38px,6vw,70px);
+    line-height:1;
+    margin-bottom:16px;
+}
+
+.hero h2{
+    color:var(--green);
+    font-size:clamp(20px,3vw,30px);
+    margin-bottom:20px;
+}
+
+.hero p{
+    color:var(--muted);
+    max-width:720px;
+    font-size:16px;
+    line-height:1.8;
+}
+
+.hero-buttons{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:13px 21px;
+    border-radius:10px;
+    font-weight:bold;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.btn-primary{
+    background:var(--blue);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--blue-dark);
+}
+
+.btn-secondary{
+    background:#fff;
+    color:var(--blue);
+    border:1px solid #bae6fd;
+}
+
+.hero-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:25px;
+    padding:32px;
+    text-align:center;
+    box-shadow:var(--shadow);
+}
+
+.hero-logo{
+    width:230px;
+    height:230px;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.hero-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+}
+
+.hero-card strong{
+    display:block;
+    color:var(--blue-dark);
+    font-size:19px;
+}
+
+.hero-card span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* ================= MAIN ================= */
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:0 22px;
+}
+
+.section{
+    padding:70px 0;
+}
+
+.section.alt{
+    background:#fff;
+}
+
+.section-title{
+    margin-bottom:35px;
+}
+
+.section-label{
+    color:var(--green);
+    text-transform:uppercase;
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:1.5px;
+    margin-bottom:8px;
+}
+
+.section-title h2{
+    color:var(--blue-dark);
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.section-title p{
+    color:var(--muted);
+}
+
+/* ================= CARDS ================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px;
+    box-shadow:0 7px 22px rgba(15,23,42,.05);
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    transition:.2s;
+    box-shadow:var(--shadow);
+}
+
+.card-icon{
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--blue-light);
+    color:var(--blue);
+    border-radius:12px;
+    font-size:23px;
+    margin-bottom:17px;
+}
+
+.card:nth-child(even) .card-icon{
+    background:var(--green-light);
+    color:var(--green);
+}
+
+.card h3{
+    color:var(--blue-dark);
+    font-size:17px;
+    margin-bottom:8px;
+}
+
+.card p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* ================= PILOTAGE ================= */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+}
+
+.kpi{
+    background:#fff;
+    border-radius:14px;
+    padding:22px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+}
+
+.kpi small{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:bold;
+}
+
+.kpi strong{
+    display:block;
+    color:var(--blue-dark);
+    font-size:34px;
+    margin:7px 0;
+}
+
+.kpi span{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.kpi.blue{
+    border-top:4px solid var(--blue);
+}
+
+.kpi.green{
+    border-top:4px solid var(--green);
+}
+
+.kpi.orange{
+    border-top:4px solid #f59e0b;
+}
+
+.kpi.purple{
+    border-top:4px solid #7c3aed;
+}
+
+/* ================= FLOW ================= */
+
+.flow{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.flow-item{
+    background:#fff;
+    border:1px solid var(--border);
+    padding:25px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 7px 20px rgba(15,23,42,.05);
+}
+
+.flow-item b{
+    display:block;
+    color:var(--blue);
+    margin-bottom:8px;
+}
+
+.flow-item span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* ================= MODULES ================= */
+
+.module-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.module{
+    background:#fff;
+    border-radius:14px;
+    padding:22px;
+    border-left:4px solid var(--blue);
+    box-shadow:0 7px 20px rgba(15,23,42,.05);
+}
+
+.module:nth-child(2n){
+    border-left-color:var(--green);
+}
+
+.module-icon{
+    font-size:27px;
+    margin-bottom:10px;
+}
+
+.module h3{
+    color:var(--blue-dark);
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.module p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+    background:#063b7a;
+    color:#dbeafe;
+    padding:45px 22px 25px;
+}
+
+.footer-inner{
+    max-width:1250px;
+    margin:auto;
+    text-align:center;
+}
+
+.footer strong{
+    color:#fff;
+    font-size:18px;
+}
+
+.footer p{
+    margin-top:8px;
+    font-size:12px;
+    line-height:1.8;
+}
+
+.footer-line{
+    margin:25px 0 18px;
+    border-top:1px solid rgba(255,255,255,.18);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1000px){
+    .hero-inner{
+        grid-template-columns:1fr;
+    }
+
+    .hero-card{
+        max-width:500px;
+        width:100%;
+        margin:auto;
+    }
+
+    .cards,
+    .dashboard,
+    .module-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .flow{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+    .header{
+        height:64px;
+    }
+
+    .logo-box{
+        width:45px;
+        height:45px;
+    }
+
+    .brand-name strong{
+        font-size:14px;
+    }
+
+    .brand-name span{
+        font-size:9px;
+    }
+
+    .header-actions{
+        display:none;
+    }
+
+    .hero{
+        padding:55px 18px;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .hero-logo{
+        width:180px;
+        height:180px;
+    }
+
+    .container{
+        padding:0 16px;
+    }
+
+    .section{
+        padding:50px 0;
+    }
+
+    .cards,
+    .dashboard,
+    .module-grid,
+    .flow{
+        grid-template-columns:1fr;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     EN-TÊTE
+===================================================== -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <a href="#accueil" class="brand">
+
+            <div class="logo-box">
+
+                <img
+                    src="assets/logo-ap2md-officiel.png"
+                    alt="Logo officiel AP2MD-Douké"
+                >
+
+            </div>
+
+            <div class="brand-name">
+
+                <strong>AP2MD CONNECT PRO</strong>
+
+                <span>ONG AP2MD-Douké</span>
+
+            </div>
+
+        </a>
+
+        <div class="header-actions">
+
+            <a class="header-btn" href="#organisation">
+                Organisation
+            </a>
+
+            <a class="header-btn" href="#projets">
+                Projets
+            </a>
+
+            <a class="header-btn" href="#modules">
+                Modules
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="accueil">
+
+    <div class="hero-inner">
+
+        <div>
+
+            <div class="hero-label">
+                Plateforme numérique institutionnelle
+            </div>
+
+            <h1>
+                AP2MD<br>CONNECT PRO
+            </h1>
+
+            <h2>
+                Données • Projets • S&E • Décision
+            </h2>
+
+            <p>
+                Une plateforme intégrée destinée à centraliser la
+                gestion des projets, le suivi-évaluation,
+                les bénéficiaires, les données Kobo,
+                les documents, les rapports et la communication
+                institutionnelle de l’ONG AP2MD-Douké.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#organisation" class="btn btn-primary">
+                    Découvrir la plateforme
+                </a>
+
+                <a href="#projets" class="btn btn-secondary">
+                    Voir les projets
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-card">
+
+            <div class="hero-logo">
+
+                <img
+                    src="assets/logo-ap2md-officiel.png"
+                    alt="Logo officiel AP2MD-Douké"
+                >
+
+            </div>
+
+            <strong>
+                AP2MD-Douké
+            </strong>
+
+            <span>
+                Association des Pêcheurs, Mareyeurs et Mareyeuses
+                pour le Développement
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ORGANISATION
+===================================================== -->
+
+<section class="section" id="organisation">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <div class="section-label">
+                Notre environnement numérique
+            </div>
+
+            <h2>
+                Une organisation connectée à ses données
+            </h2>
+
+            <p>
+                AP2MD CONNECT PRO rassemble les principaux
+                domaines de gestion et de pilotage de l’ONG.
+            </p>
+
+        </div>
+
+
+        <div class="cards">
+
+            <div class="card">
+
+                <div class="card-icon">📁</div>
+
+                <h3>Gestion des projets</h3>
+
+                <p>
+                    Structurer les projets, objectifs,
+                    résultats, activités, indicateurs,
+                    budgets et partenaires.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">🎯</div>
+
+                <h3>Suivi-évaluation</h3>
+
+                <p>
+                    Suivre les indicateurs, les résultats,
+                    les réalisations, les écarts et les
+                    actions correctives.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">👥</div>
+
+                <h3>Bénéficiaires</h3>
+
+                <p>
+                    Centraliser les informations relatives
+                    aux groupements et aux bénéficiaires.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">📊</div>
+
+                <h3>Analyse & décision</h3>
+
+                <p>
+                    Transformer les données disponibles
+                    en informations utiles au pilotage.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PILOTAGE
+===================================================== -->
+
+<section class="section alt" id="pilotage">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <div class="section-label">
+                Pilotage institutionnel
+            </div>
+
+            <h2>
+                Tableau de bord de pilotage
+            </h2>
+
+            <p>
+                Les indicateurs ci-dessous seront alimentés
+                automatiquement lorsque les bases réelles
+                seront connectées.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard">
+
+            <div class="kpi blue">
+
+                <small>PROJETS</small>
+
+                <strong>0</strong>
+
+                <span>Projets enregistrés</span>
+
+            </div>
+
+
+            <div class="kpi green">
+
+                <small>GROUPEMENTS</small>
+
+                <strong>0</strong>
+
+                <span>Groupements suivis</span>
+
+            </div>
+
+
+            <div class="kpi orange">
+
+                <small>BÉNÉFICIAIRES</small>
+
+                <strong>0</strong>
+
+                <span>Bénéficiaires enregistrés</span>
+
+            </div>
+
+
+            <div class="kpi purple">
+
+                <small>INDICATEURS</small>
+
+                <strong>0</strong>
+
+                <span>Indicateurs de suivi</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROJETS
+===================================================== -->
+
+<section class="section" id="projets">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <div class="section-label">
+                Gestion intégrée
+            </div>
+
+            <h2>
+                Les projets au cœur de la plateforme
+            </h2>
+
+            <p>
+                Chaque projet pourra être relié à ses résultats,
+                indicateurs, activités, bénéficiaires,
+                données de collecte et rapports.
+            </p>
+
+        </div>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+
+                <b>01 — PROJETS</b>
+
+                <span>
+                    Objectifs & budget
+                </span>
+
+            </div>
+
+
+            <div class="flow-item">
+
+                <b>02 — RÉSULTATS</b>
+
+                <span>
+                    Résultats attendus
+                </span>
+
+            </div>
+
+
+            <div class="flow-item">
+
+                <b>03 — INDICATEURS</b>
+
+                <span>
+                    Mesure des progrès
+                </span>
+
+            </div>
+
+
+            <div class="flow-item">
+
+                <b>04 — ACTIVITÉS</b>
+
+                <span>
+                    Mise en œuvre
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MODULES
+===================================================== -->
+
+<section class="section alt" id="modules">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <div class="section-label">
+                Architecture fonctionnelle
+            </div>
+
+            <h2>
+                Modules AP2MD CONNECT PRO
+            </h2>
+
+            <p>
+                Une architecture pensée pour accompagner
+                progressivement la transformation numérique
+                de l’ONG.
+            </p>
+
+        </div>
+
+
+        <div class="module-grid">
+
+            <div class="module">
+
+                <div class="module-icon">📁</div>
+
+                <h3>Gestion des projets</h3>
+
+                <p>
+                    Projets, objectifs, résultats,
+                    activités, indicateurs, budget
+                    et partenaires.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">👥</div>
+
+                <h3>Groupements</h3>
+
+                <p>
+                    Organisation, membres, gouvernance,
+                    réunions, caisses et situation
+                    des groupements.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">🧑‍🤝‍🧑</div>
+
+                <h3>Bénéficiaires</h3>
+
+                <p>
+                    Identification, caractéristiques,
+                    participation et suivi des bénéficiaires.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📅</div>
+
+                <h3>Activités</h3>
+
+                <p>
+                    Planification, réalisation,
+                    participants, zones et statut.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">🎯</div>
+
+                <h3>Indicateurs & S&E</h3>
+
+                <p>
+                    Baseline, cibles, réalisations,
+                    taux, tendances et actions correctives.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📥</div>
+
+                <h3>Données Kobo</h3>
+
+                <p>
+                    Collecte, importation, synchronisation
+                    et contrôle qualité des données.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📈</div>
+
+                <h3>Analyses</h3>
+
+                <p>
+                    Tableaux de bord, graphiques,
+                    tendances, classements et synthèses.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">⚠️</div>
+
+                <h3>Alertes</h3>
+
+                <p>
+                    Suivi des écarts, risques,
+                    retards et actions à prendre.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📄</div>
+
+                <h3>Rapports</h3>
+
+                <p>
+                    Rapports de mission, rapports S&E,
+                    rapports d’activités et projets.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📚</div>
+
+                <h3>Documents</h3>
+
+                <p>
+                    Centralisation et organisation
+                    de la documentation institutionnelle.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">💰</div>
+
+                <h3>Budget</h3>
+
+                <p>
+                    Suivi budgétaire, dépenses,
+                    écarts et financement des projets.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">🤝</div>
+
+                <h3>Partenaires</h3>
+
+                <p>
+                    Gestion des partenaires,
+                    collaborations et relations institutionnelles.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📰</div>
+
+                <h3>Publications</h3>
+
+                <p>
+                    Actualités, publications et
+                    communication institutionnelle.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📸</div>
+
+                <h3>Médias</h3>
+
+                <p>
+                    Photos, vidéos et valorisation
+                    des actions de l’ONG.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">📆</div>
+
+                <h3>Événements</h3>
+
+                <p>
+                    Réunions, conférences,
+                    événements et activités publiques.
+                </p>
+
+            </div>
+
+
+            <div class="module">
+
+                <div class="module-icon">🎓</div>
+
+                <h3>AP2MD Academy</h3>
+
+                <p>
+                    Formations, ressources,
+                    quiz et évaluations.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     VISION
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <div class="section-label">
+                Vision
+            </div>
+
+            <h2>
+                Des données vers les résultats
+            </h2>
+
+            <p>
+                La plateforme est conçue pour permettre une
+                lecture claire des performances et faciliter
+                le pilotage des interventions de l’ONG.
+            </p>
+
+        </div>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+                <b>DONNÉES</b>
+                <span>Kobo & collecte</span>
+            </div>
+
+            <div class="flow-item">
+                <b>ANALYSE</b>
+                <span>Traitement & qualité</span>
+            </div>
+
+            <div class="flow-item">
+                <b>RÉSULTATS</b>
+                <span>Indicateurs & performance</span>
+            </div>
+
+            <div class="flow-item">
+                <b>DÉCISION</b>
+                <span>Pilotage stratégique</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-inner">
+
+        <strong>
+            AP2MD-Douké CONNECT PRO
+        </strong>
+
+        <p>
+            Plateforme numérique institutionnelle de
+            l’ONG AP2MD-Douké.
+        </p>
+
+        <p>
+            Département Informatique — ONG AP2MD-Douké
+        </p>
+
+        <p>
+            Développé avec la contribution de
+            Réginald KOYAKELA « Le Miséricordieux »
+        </p>
+
+        <p>
+            Cette plateforme numérique a été conçue et développée
+            avec la grâce de l’IDM — Interminable Divine Miséricorde.
+        </p>
+
+        <div class="footer-line"></div>
+
+        <p>
+            © <span id="year"></span>
+            AP2MD-Douké — Tous droits réservés.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+console.log(
+    "AP2MD CONNECT PRO — Interface institutionnelle chargée."
+);
+</script>
+
+</body>
+</html>
