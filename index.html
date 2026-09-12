@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AP2MD CONNECT PRO</title>
+
+    <style>
+        :root {
+            --blue: #0b5ed7;
+            --green: #198754;
+            --white: #ffffff;
+            --bg: #f4f7fb;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--blue), var(--green));
+            color: white;
+            padding: 25px 18px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+        }
+
+        .logo-box {
+            width: 125px;
+            height: 125px;
+            margin: 0 auto 15px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 8px;
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: block;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: rgba(255,255,255,0.18);
+        }
+
+        /* CONTENU */
+        .main {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 25px;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .topbar h1 {
+            color: var(--blue);
+            margin-bottom: 7px;
+        }
+
+        .topbar p {
+            color: var(--muted);
+        }
+
+        /* KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .kpi {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--blue);
+        }
+
+        .kpi:nth-child(2) {
+            border-left-color: var(--green);
+        }
+
+        .kpi:nth-child(3) {
+            border-left-color: #f59e0b;
+        }
+
+        .kpi:nth-child(4) {
+            border-left-color: #7c3aed;
+        }
+
+        .kpi h3 {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .kpi strong {
+            font-size: 30px;
+            color: var(--text);
+        }
+
+        /* CARTES */
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: var(--blue);
+            font-size: 19px;
+            margin-bottom: 15px;
+        }
+
+        .project {
+            border: 1px solid var(--border);
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        .project h3 {
+            margin-bottom: 8px;
+        }
+
+        .project p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* MODULES */
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .module {
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fafafa;
+        }
+
+        .module strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--blue);
+        }
+
+        .module span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: 25px;
+            padding: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo-box">
+            <img
+                src="./assets/logo-ap2md-officiel-2.png"
+                alt="Logo officiel AP2MD-Douké"
+            >
+        </div>
+
+        <div class="brand">
+            <h2>AP2MD CONNECT PRO</h2>
+            <p>Plateforme institutionnelle</p>
+        </div>
+
+        <nav class="menu">
+            <a href="#" class="active">🏠 Tableau de bord</a>
+            <a href="#">📁 Projets</a>
+            <a href="#">👥 Groupements</a>
+            <a href="#">👤 Bénéficiaires</a>
+            <a href="#">📋 Activités</a>
+            <a href="#">📊 Indicateurs</a>
+            <a href="#">📥 Données Kobo</a>
+            <a href="#">📰 Publications</a>
+            <a href="#">🎥 Médias</a>
+            <a href="#">📚 Formations</a>
+            <a href="#">📄 Rapports</a>
+            <a href="#">⚙️ Administration</a>
+        </nav>
+
+    </aside>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main">
+
+        <section class="topbar">
+            <h1>Tableau de bord AP2MD</h1>
+            <p>
+                Votre espace AP2MD CONNECT PRO est prêt.
+            </p>
+        </section>
+
+        <!-- INDICATEURS -->
+        <section class="kpi-grid">
+
+            <div class="kpi">
+                <h3>Projets</h3>
+                <strong>0</strong>
+            </div>
+
+            <div class="kpi">
+                <h3>Groupements</h3>
+                <strong>0</strong>
+            </div>
+
+            <div class="kpi">
+                <h3>Bénéficiaires</h3>
+                <strong>0</strong>
+            </div>
+
+            <div class="kpi">
+                <h3>Activités</h3>
+                <strong>0</strong>
+            </div>
+
+        </section>
+
+        <section class="grid">
+
+            <div>
+
+                <div class="card">
+                    <h2>Projet principal</h2>
+
+                    <div class="project">
+                        <h3>TCP/CAF/4001</h3>
+
+                        <p>
+                            Promotion de la pêche artisanale,
+                            de la pisciculture et valorisation
+                            des produits halieutiques.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Suivi des indicateurs</h2>
+
+                    <div class="project">
+                        <p>
+                            Les données réelles seront intégrées
+                            progressivement dans la plateforme
+                            à partir de Supabase et KoboToolbox.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="card">
+                    <h2>Modules</h2>
+
+                    <div class="modules">
+
+                        <div class="module">
+                            <strong>Projets</strong>
+                            <span>Gestion des projets</span>
+                        </div>
+
+                        <div class="module">
+                            <strong>Groupements</strong>
+                            <span>Suivi organisationnel</span>
+                        </div>
+
+                        <div class="module">
+                            <strong>Indicateurs</strong>
+                            <span>Suivi-évaluation</span>
+                        </div>
+
+                        <div class="module">
+                            <strong>Kobo</strong>
+                            <span>Données de collecte</span>
+                        </div>
+
+                        <div class="module">
+                            <strong>Rapports</strong>
+                            <span>Rapports de projets</span>
+                        </div>
+
+                        <div class="module">
+                            <strong>Formations</strong>
+                            <span>AP2MD Academy</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer>
+            <p>
+                AP2MD CONNECT PRO
+            </p>
+
+            <p>
+                Développé par le département informatique de l’ONG AP2MD -
+                KOYAKELA Réginald le Miséricordieux
+            </p>
+
+            <p id="year"></p>
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    document.getElementById("year").textContent =
+        "© " + new Date().getFullYear() + " AP2MD-Douké";
+</script>
+
+</body>
+</html>
