@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal d’audit — AP2MD CONNECT PRO</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8fb;
+            color: #17324d;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0b5fa5, #0a7f62);
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            background: white;
+            padding: 6px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-box img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand-text p {
+            margin: 5px 0 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button,
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-light {
+            background: white;
+            color: #0b5fa5;
+        }
+
+        .btn-light:hover {
+            background: #eaf4fb;
+        }
+
+        .btn-primary {
+            background: #0b5fa5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #084b82;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 25px auto;
+            padding: 0 18px;
+        }
+
+        .page-title {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .page-title h2 {
+            margin: 0 0 7px;
+            color: #0b5fa5;
+        }
+
+        .page-title p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        .security-note {
+            margin-top: 15px;
+            padding: 12px 15px;
+            border-left: 4px solid #0a7f62;
+            background: #eefaf6;
+            color: #245b4b;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #ccd7e2;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #0b5fa5;
+            box-shadow: 0 0 0 2px rgba(11,95,165,0.08);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #e5eaf0;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        th {
+            background: #eef5fa;
+            color: #174a70;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:hover td {
+            background: #f8fbfd;
+        }
+
+        .action {
+            background: #0b5fa5;
+            color: white;
+            padding: 7px 10px;
+            font-size: 12px;
+        }
+
+        .action:hover {
+            background: #084b82;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-success {
+            background: #dff5eb;
+            color: #14704e;
+        }
+
+        .badge-danger {
+            background: #fde4e4;
+            color: #a52626;
+        }
+
+        .empty {
+            padding: 35px;
+            text-align: center;
+            color: #738295;
+        }
+
+        .loading {
+            padding: 30px;
+            text-align: center;
+            color: #0b5fa5;
+            font-weight: 600;
+        }
+
+        .error {
+            margin: 15px 0;
+            padding: 13px;
+            border-radius: 8px;
+            background: #fdecec;
+            color: #a12626;
+            border: 1px solid #f3caca;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 30, 50, 0.62);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: min(900px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 14px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+        }
+
+        .modal-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5eaf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #0b5fa5;
+        }
+
+        .close {
+            background: #edf2f7;
+            color: #334155;
+            font-size: 20px;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .detail-item strong {
+            display: block;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .json-box {
+            background: #0f172a;
+            color: #d9e7f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #738295;
+            font-size: 12px;
+        }
+
+        @media (max-width: 850px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="logo-box">
+            <img
+                src="./assets/logo-ap2md-officiel-2.png"
+                alt="Logo officiel AP2MD-Douké"
+            >
+        </div>
+
+        <div class="brand-text">
+            <h1>AP2MD CONNECT PRO</h1>
+            <p>Journal d’audit et de sécurité</p>
+        </div>
+    </div>
+
+    <div class="header-actions">
+        <a href="./dashboard.html" class="btn btn-light">
+            ← Tableau de bord
+        </a>
+
+        <button class="btn btn-light" onclick="loadAuditLogs()">
+            ↻ Actualiser
+        </button>
+    </div>
+</header>
+
+<main>
+
+    <section class="page-title">
+        <h2>Journal des activités et de sécurité</h2>
+
+        <p>
+            Historique des opérations effectuées dans AP2MD CONNECT PRO.
+        </p>
+
+        <div class="security-note">
+            🔐 Cette interface est réservée au
+            <strong>Super Administrateur</strong>.
+            Les opérations importantes sont enregistrées dans le journal d’audit.
+        </div>
+    </section>
+
+    <div id="errorBox"></div>
+
+    <section class="filters">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Rechercher par ID, utilisateur ou action..."
+            oninput="applyFilters()"
+        >
+
+        <select id="actionFilter" onchange="applyFilters()">
+            <option value="">Toutes les actions</option>
+            <option value="create">Création</option>
+            <option value="update">Modification</option>
+            <option value="block">Blocage</option>
+            <option value="unblock">Déblocage</option>
+            <option value="delete">Suppression</option>
+        </select>
+
+        <select id="tableFilter" onchange="applyFilters()">
+            <option value="">Toutes les tables</option>
+        </select>
+
+        <button class="btn btn-primary" onclick="resetFilters()">
+            Réinitialiser
+        </button>
+
+    </section>
+
+    <section class="table-container">
+
+        <div id="loading" class="loading">
+            Chargement du journal d’audit...
+        </div>
+
+        <table id="auditTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Date / heure</th>
+                    <th>Utilisateur</th>
+                    <th>Action</th>
+                    <th>Table</th>
+                    <th>ID concerné</th>
+                    <th>Détails</th>
+                </tr>
+            </thead>
+
+            <tbody id="auditBody"></tbody>
+        </table>
+
+        <div id="emptyMessage" class="empty" style="display:none;">
+            Aucun enregistrement d’audit trouvé.
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    AP2MD CONNECT PRO — Journal d’audit et de sécurité
+</footer>
+
+
+<!-- MODAL DETAILS -->
+
+<div class="modal" id="detailsModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>Détails de l’opération</h3>
+
+            <button
+                class="close"
+                onclick="closeDetails()"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body" id="detailsBody"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://pturkucczqqioivapjcr.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_GO8o-jJp97DG0poviRApzQ_v3CgaqRT";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+let allLogs = [];
+let filteredLogs = [];
+
+
+/* =========================
+   UTILITAIRES
+========================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "—";
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+        return escapeHtml(dateValue);
+    }
+
+    return date.toLocaleString("fr-FR", {
+        dateStyle: "short",
+        timeStyle: "medium"
+    });
+}
+
+
+function formatJson(value) {
+
+    if (value === null || value === undefined) {
+        return "Aucune donnée";
+    }
+
+    try {
+        return JSON.stringify(value, null, 2);
+    } catch {
+        return String(value);
+    }
+}
+
+
+function showError(message) {
+
+    document.getElementById("errorBox").innerHTML =
+        `<div class="error">${escapeHtml(message)}</div>`;
+}
+
+
+function clearError() {
+
+    document.getElementById("errorBox").innerHTML = "";
+}
+
+
+/* =========================
+   VERIFICATION SESSION
+========================= */
+
+async function checkAccess() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+
+        window.location.href = "./index.html";
+
+        return false;
+    }
+
+
+    const {
+        data: profile,
+        error
+    } = await supabaseClient
+        .from("user_profiles")
+        .select("role,status")
+        .eq("id", session.user.id)
+        .maybeSingle();
+
+
+    if (error) {
+
+        showError(
+            "Impossible de vérifier les droits d'accès."
+        );
+
+        return false;
+    }
+
+
+    if (
+        !profile ||
+        profile.role !== "super_administrateur" ||
+        profile.status !== "active"
+    ) {
+
+        showError(
+            "Accès refusé : cette interface est réservée au Super Administrateur."
+        );
+
+        document.getElementById("loading").style.display = "none";
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =========================
+   CHARGEMENT AUDIT
+========================= */
+
+async function loadAuditLogs() {
+
+    clearError();
+
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("auditTable").style.display = "none";
+    document.getElementById("emptyMessage").style.display = "none";
+
+
+    const accessGranted = await checkAccess();
+
+    if (!accessGranted) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("audit_logs")
+        .select(`
+            id,
+            user_id,
+            action,
+            table_name,
+            record_id,
+            old_data,
+            new_data,
+            ip_address,
+            created_at
+        `)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(1000);
+
+
+    if (error) {
+
+        document.getElementById("loading").style.display = "none";
+
+        showError(
+            "Impossible de charger le journal d’audit : " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    allLogs = data || [];
+
+    filteredLogs = [...allLogs];
+
+
+    populateTableFilter();
+
+    renderLogs();
+
+}
+
+
+/* =========================
+   FILTRE TABLES
+========================= */
+
+function populateTableFilter() {
+
+    const select =
+        document.getElementById("tableFilter");
+
+
+    const currentValue =
+        select.value;
+
+
+    const tables =
+        [...new Set(
+            allLogs
+                .map(log => log.table_name)
+                .filter(Boolean)
+        )]
+        .sort();
+
+
+    select.innerHTML =
+        `<option value="">Toutes les tables</option>`;
+
+
+    tables.forEach(table => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = table;
+        option.textContent = table;
+
+        select.appendChild(option);
+
+    });
+
+
+    select.value = currentValue;
+
+}
+
+
+/* =========================
+   APPLICATION DES FILTRES
+========================= */
+
+function applyFilters() {
+
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const action =
+        document
+            .getElementById("actionFilter")
+            .value;
+
+
+    const table =
+        document
+            .getElementById("tableFilter")
+            .value;
+
+
+    filteredLogs =
+        allLogs.filter(log => {
+
+            const searchable = [
+
+                log.id,
+                log.user_id,
+                log.action,
+                log.table_name,
+                log.record_id,
+                log.ip_address
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+            const matchesSearch =
+                !search ||
+                searchable.includes(search);
+
+
+            const matchesAction =
+                !action ||
+                log.action === action;
+
+
+            const matchesTable =
+                !table ||
+                log.table_name === table;
+
+
+            return (
+                matchesSearch &&
+                matchesAction &&
+                matchesTable
+            );
+
+        });
+
+
+    renderLogs();
+
+}
+
+
+/* =========================
+   RESET FILTRES
+========================= */
+
+function resetFilters() {
+
+    document.getElementById("searchInput").value = "";
+
+    document.getElementById("actionFilter").value = "";
+
+    document.getElementById("tableFilter").value = "";
+
+
+    filteredLogs = [...allLogs];
+
+    renderLogs();
+
+}
+
+
+/* =========================
+   AFFICHAGE DES LOGS
+========================= */
+
+function renderLogs() {
+
+    const loading =
+        document.getElementById("loading");
+
+    const table =
+        document.getElementById("auditTable");
+
+    const empty =
+        document.getElementById("emptyMessage");
+
+    const body =
+        document.getElementById("auditBody");
+
+
+    loading.style.display = "none";
+
+    body.innerHTML = "";
+
+
+    if (filteredLogs.length === 0) {
+
+        table.style.display = "none";
+
+        empty.style.display = "block";
+
+        return;
+    }
+
+
+    table.style.display = "table";
+
+    empty.style.display = "none";
+
+
+    filteredLogs.forEach(log => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        let badgeClass =
+            "badge-success";
+
+
+        if (
+            log.action === "delete" ||
+            log.action === "block"
+        ) {
+
+            badgeClass =
+                "badge-danger";
+
+        }
+
+
+        tr.innerHTML = `
+
+            <td>
+                ${formatDate(log.created_at)}
+            </td>
+
+            <td>
+                <small>
+                    ${escapeHtml(log.user_id || "—")}
+                </small>
+            </td>
+
+            <td>
+                <span class="badge ${badgeClass}">
+                    ${escapeHtml(log.action || "—")}
+                </span>
+            </td>
+
+            <td>
+                ${escapeHtml(log.table_name || "—")}
+            </td>
+
+            <td>
+                <small>
+                    ${escapeHtml(log.record_id || "—")}
+                </small>
+            </td>
+
+            <td>
+                <button
+                    class="action"
+                    onclick="showDetails('${escapeHtml(String(log.id))}')"
+                >
+                    👁 Voir
+                </button>
+            </td>
+
+        `;
+
+
+        body.appendChild(tr);
+
+    });
+
+}
+
+
+/* =========================
+   DETAILS
+========================= */
+
+function showDetails(id) {
+
+    const log =
+        allLogs.find(
+            item => String(item.id) === String(id)
+        );
+
+
+    if (!log) {
+        return;
+    }
+
+
+    const body =
+        document.getElementById("detailsBody");
+
+
+    body.innerHTML = `
+
+        <div class="detail-grid">
+
+            <div class="detail-item">
+                <strong>ID du journal</strong>
+                ${escapeHtml(log.id)}
+            </div>
+
+            <div class="detail-item">
+                <strong>Date / heure</strong>
+                ${formatDate(log.created_at)}
+            </div>
+
+            <div class="detail-item">
+                <strong>Utilisateur</strong>
+                ${escapeHtml(log.user_id || "—")}
+            </div>
+
+            <div class="detail-item">
+                <strong>Action</strong>
+                ${escapeHtml(log.action || "—")}
+            </div>
+
+            <div class="detail-item">
+                <strong>Table</strong>
+                ${escapeHtml(log.table_name || "—")}
+            </div>
+
+            <div class="detail-item">
+                <strong>ID de l’enregistrement</strong>
+                ${escapeHtml(log.record_id || "—")}
+            </div>
+
+            <div class="detail-item">
+                <strong>Adresse IP</strong>
+                ${escapeHtml(log.ip_address || "Non disponible")}
+            </div>
+
+        </div>
+
+
+        <h4>État avant l’opération</h4>
+
+        <div class="json-box">
+${escapeHtml(formatJson(log.old_data))}
+        </div>
+
+
+        <h4>État après l’opération</h4>
+
+        <div class="json-box">
+${escapeHtml(formatJson(log.new_data))}
+        </div>
+
+    `;
+
+
+    document
+        .getElementById("detailsModal")
+        .classList.add("active");
+
+}
+
+
+/* =========================
+   FERMER MODAL
+========================= */
+
+function closeDetails() {
+
+    document
+        .getElementById("detailsModal")
+        .classList.remove("active");
+
+}
+
+
+/* Fermer en cliquant à l'extérieur */
+
+document
+    .getElementById("detailsModal")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+
+            closeDetails();
+
+        }
+
+    });
+
+
+/* Fermer avec ESC */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+
+        closeDetails();
+
+    }
+
+});
+
+
+/* =========================
+   INITIALISATION
+========================= */
+
+loadAuditLogs();
+
+</script>
+
+</body>
+</html>
