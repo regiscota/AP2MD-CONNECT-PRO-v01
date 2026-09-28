@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Utilisateurs - AP2MD CONNECT PRO</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-box {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .header-text h1 {
+            color: #0b5cab;
+            font-size: 23px;
+        }
+
+        .header-text p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 25px auto;
+            padding: 0 18px;
+        }
+
+        .back {
+            margin-bottom: 18px;
+        }
+
+        .back a {
+            color: #0b5cab;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        h2 {
+            color: #0b5cab;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 17px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #0b5cab;
+            color: white;
+        }
+
+        .secondary {
+            background: #e8f1fb;
+            color: #0b5cab;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0b5cab;
+            color: white;
+            padding: 13px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .role {
+            color: #0b5cab;
+            font-weight: bold;
+        }
+
+        .badge {
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media (max-width: 800px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .header-text h1 {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo-box">
+        <img
+            src="./assets/logo-ap2md-officiel-2.png"
+            alt="Logo officiel AP2MD-Douké"
+        >
+    </div>
+
+    <div class="header-text">
+        <h1>AP2MD CONNECT PRO</h1>
+        <p>Gestion des comptes, rôles et accès</p>
+    </div>
+
+</header>
+
+<div class="container">
+
+    <div class="back">
+        <a href="./dashboard.html">← Retour au tableau de bord</a>
+    </div>
+
+    <div class="card">
+
+        <h2>Utilisateurs</h2>
+
+        <p class="description">
+            Gestion centralisée des utilisateurs de la plateforme
+            AP2MD CONNECT PRO.
+        </p>
+
+        <div class="actions">
+
+            <button
+                class="primary"
+                onclick="alert('La création des utilisateurs sera activée dans la prochaine étape.')">
+                + Ajouter un utilisateur
+            </button>
+
+            <button
+                class="secondary"
+                onclick="loadUsers()">
+                Actualiser
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="filters">
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Rechercher un nom ou un email..."
+                oninput="filterUsers()"
+            >
+
+            <select
+                id="roleFilter"
+                onchange="filterUsers()">
+
+                <option value="">Tous les rôles</option>
+
+                <option value="super_administrateur">
+                    Super administrateur
+                </option>
+
+                <option value="administrateur">
+                    Administrateur
+                </option>
+
+                <option value="responsable_se">
+                    Responsable S&E
+                </option>
+
+                <option value="gestionnaire_projet">
+                    Gestionnaire projet
+                </option>
+
+                <option value="agent_terrain">
+                    Agent terrain
+                </option>
+
+                <option value="utilisateur_autorise">
+                    Utilisateur autorisé
+                </option>
+
+            </select>
+
+            <select
+                id="statusFilter"
+                onchange="filterUsers()">
+
+                <option value="">Tous les statuts</option>
+                <option value="active">Actif</option>
+                <option value="inactive">Inactif</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Nom complet</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Rôle</th>
+                    <th>Statut</th>
+                    <th>Créé le</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="usersTableBody">
+
+                <tr>
+                    <td colspan="6" class="message">
+                        Chargement des utilisateurs...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://pturkucczqqioivapjcr.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_GO8o-jJp97DG0poviRApzQ_v3CgaqRT";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+let users = [];
+
+
+function roleLabel(role) {
+
+    const roles = {
+
+        super_administrateur:
+            "Super administrateur",
+
+        administrateur:
+            "Administrateur",
+
+        responsable_se:
+            "Responsable S&E",
+
+        gestionnaire_projet:
+            "Gestionnaire projet",
+
+        agent_terrain:
+            "Agent terrain",
+
+        utilisateur_autorise:
+            "Utilisateur autorisé"
+
+    };
+
+    return roles[role] || role;
+
+}
+
+
+function renderUsers(list) {
+
+    const tbody =
+        document.getElementById(
+            "usersTableBody"
+        );
+
+    if (!list.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="message">
+                    Aucun utilisateur trouvé.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        list.map(user => `
+
+            <tr>
+
+                <td>
+                    ${user.full_name || "—"}
+                </td>
+
+                <td>
+                    ${user.email || "—"}
+                </td>
+
+                <td>
+                    ${user.phone || "—"}
+                </td>
+
+                <td>
+                    <span class="role">
+                        ${roleLabel(user.role)}
+                    </span>
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        user.status === "active"
+                        ? "active"
+                        : "inactive"
+                    }">
+
+                        ${
+                            user.status === "active"
+                            ? "Actif"
+                            : "Inactif"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    ${
+                        user.created_at
+                        ? new Date(
+                            user.created_at
+                          ).toLocaleDateString(
+                            "fr-FR"
+                          )
+                        : "—"
+                    }
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+function filterUsers() {
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value.toLowerCase();
+
+    const role =
+        document.getElementById(
+            "roleFilter"
+        ).value;
+
+    const status =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    const filtered =
+        users.filter(user => {
+
+            const name =
+                (user.full_name || "")
+                .toLowerCase();
+
+            const email =
+                (user.email || "")
+                .toLowerCase();
+
+
+            const searchMatch =
+                name.includes(search) ||
+                email.includes(search);
+
+
+            const roleMatch =
+                !role ||
+                user.role === role;
+
+
+            const statusMatch =
+                !status ||
+                user.status === status;
+
+
+            return (
+                searchMatch &&
+                roleMatch &&
+                statusMatch
+            );
+
+        });
+
+
+    renderUsers(filtered);
+
+}
+
+
+async function loadUsers() {
+
+    const tbody =
+        document.getElementById(
+            "usersTableBody"
+        );
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="6" class="message">
+                Chargement des utilisateurs...
+            </td>
+        </tr>
+    `;
+
+
+    const {
+        data: { user },
+        error: authError
+
+    } = await supabaseClient
+        .auth
+        .getUser();
+
+
+    if (authError || !user) {
+
+        window.location.href =
+            "./index.html";
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("user_profiles")
+
+        .select(`
+            id,
+            full_name,
+            email,
+            phone,
+            role,
+            status,
+            created_at
+        `)
+
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur Supabase :",
+            error
+        );
+
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="message">
+                    Erreur lors du chargement des utilisateurs.
+                    Vérifiez la console du navigateur.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    users = data || [];
+
+    renderUsers(users);
+
+}
+
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
