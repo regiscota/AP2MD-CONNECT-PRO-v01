@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilisateurs - AP2MD CONNECT PRO</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: linear-gradient(135deg, #075985, #0f766e);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.15);
+        }
+
+        .header-content {
+            max-width: 1250px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logo-box {
+            width: 78px;
+            height: 78px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            flex-shrink: 0;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .header-title h1 {
+            margin: 0 0 5px;
+            font-size: 24px;
+        }
+
+        .header-title p {
+            margin: 0;
+            opacity: .9;
+        }
+
+        main {
+            max-width: 1250px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            color: #075985;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            opacity: .92;
+        }
+
+        .btn-primary {
+            background: #075985;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+
+        .btn-success {
+            background: #15803d;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-info {
+            background: #0284c7;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, .08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #075985;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #0284c7;
+            box-shadow: 0 0 0 2px rgba(2,132,199,.12);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th {
+            background: #075985;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .badge-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            padding: 7px 9px;
+            font-size: 12px;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+            display: block;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,.55);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 15px 50px rgba(0,0,0,.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #075985;
+        }
+
+        .close-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            font-size: 20px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .detail-item strong {
+            display: block;
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .detail-item span {
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .warning-box {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .admin-info {
+            background: #ecfeff;
+            border: 1px solid #a5f3fc;
+            color: #155e75;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid,
+            .filters,
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                align-items: flex-start;
+            }
+
+            .header-title h1 {
+                font-size: 19px;
+            }
+
+            .logo-box {
+                width: 62px;
+                height: 62px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="logo-box">
+            <img
+                src="./assets/logo-ap2md-officiel-2.png"
+                alt="Logo officiel AP2MD-Douké"
+            >
+        </div>
+
+        <div class="header-title">
+            <h1>AP2MD CONNECT PRO</h1>
+            <p>Gestion des utilisateurs, rôles et accès</p>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <div class="top-bar">
+        <h2>Gestion des utilisateurs</h2>
+
+        <div>
+            <button class="btn-secondary" onclick="window.location.href='./dashboard.html'">
+                ← Tableau de bord
+            </button>
+
+            <button class="btn-primary" onclick="loadUsers()">
+                Actualiser
+            </button>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="adminInfo" class="admin-info" style="display:none;"></div>
+
+    <!-- CREATION UTILISATEUR -->
+    <section class="card" id="createSection">
+
+        <h3>Ajouter un utilisateur</h3>
+
+        <div class="warning-box">
+            Seul le Super Administrateur peut créer, modifier, bloquer,
+            débloquer ou supprimer les comptes utilisateurs.
+        </div>
+
+        <form id="createForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="full_name">Nom complet *</label>
+                    <input
+                        type="text"
+                        id="full_name"
+                        required
+                        maxlength="200"
+                        placeholder="Nom et prénom"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Adresse e-mail *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        maxlength="320"
+                        placeholder="exemple@email.com"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input
+                        type="text"
+                        id="phone"
+                        maxlength="40"
+                        placeholder="Numéro de téléphone"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Rôle *</label>
+
+                    <select id="role" required>
+                        <option value="">-- Sélectionner --</option>
+                        <option value="administrateur">Administrateur</option>
+                        <option value="responsable_se">Responsable S&E</option>
+                        <option value="gestionnaire_projet">Gestionnaire de projet</option>
+                        <option value="agent_terrain">Agent de terrain</option>
+                        <option value="utilisateur_autorise">Utilisateur autorisé</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Statut *</label>
+
+                    <select id="status" required>
+                        <option value="active">Actif</option>
+                        <option value="inactive">Inactif</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe *</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                        minlength="8"
+                        maxlength="128"
+                        placeholder="Minimum 8 caractères"
+                    >
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn-success"
+                    id="createButton"
+                >
+                    Ajouter l'utilisateur
+                </button>
+
+                <button
+                    type="reset"
+                    class="btn-secondary"
+                >
+                    Réinitialiser
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- FILTRES -->
+    <section class="card">
+
+        <h3>Recherche et filtres</h3>
+
+        <div class="filters">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Rechercher par nom ou e-mail..."
+                oninput="applyFilters()"
+            >
+
+            <select id="roleFilter" onchange="applyFilters()">
+                <option value="">Tous les rôles</option>
+                <option value="administrateur">Administrateur</option>
+                <option value="responsable_se">Responsable S&E</option>
+                <option value="gestionnaire_projet">Gestionnaire de projet</option>
+                <option value="agent_terrain">Agent de terrain</option>
+                <option value="utilisateur_autorise">Utilisateur autorisé</option>
+                <option value="super_administrateur">Super Administrateur</option>
+            </select>
+
+            <select id="statusFilter" onchange="applyFilters()">
+                <option value="">Tous les statuts</option>
+                <option value="active">Actifs</option>
+                <option value="inactive">Inactifs</option>
+            </select>
+
+        </div>
+
+    </section>
+
+
+    <!-- TABLE UTILISATEURS -->
+    <section class="card">
+
+        <h3>Liste des utilisateurs</h3>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Nom complet</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Créé le</th>
+                        <th id="actionsHeader">Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="usersTableBody">
+
+                    <tr>
+                        <td colspan="7" class="loading">
+                            Chargement des utilisateurs...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- MODAL VOIR -->
+<div class="modal" id="viewModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>Détails de l'utilisateur</h3>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('viewModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="viewContent"></div>
+
+        <div class="form-actions">
+
+            <button
+                class="btn-secondary"
+                onclick="closeModal('viewModal')"
+            >
+                Fermer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODAL MODIFICATION -->
+<div class="modal" id="editModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>Modifier l'utilisateur</h3>
+
+            <button
+                class="close-btn"
+                onclick="closeModal('editModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form id="editForm">
+
+            <input type="hidden" id="editUserId">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="editFullName">Nom complet *</label>
+                    <input
+                        type="text"
+                        id="editFullName"
+                        required
+                        maxlength="200"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="editEmail">E-mail *</label>
+                    <input
+                        type="email"
+                        id="editEmail"
+                        required
+                        maxlength="320"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="editPhone">Téléphone</label>
+                    <input
+                        type="text"
+                        id="editPhone"
+                        maxlength="40"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="editRole">Rôle *</label>
+
+                    <select id="editRole" required>
+                        <option value="administrateur">Administrateur</option>
+                        <option value="responsable_se">Responsable S&E</option>
+                        <option value="gestionnaire_projet">Gestionnaire de projet</option>
+                        <option value="agent_terrain">Agent de terrain</option>
+                        <option value="utilisateur_autorise">Utilisateur autorisé</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editStatus">Statut *</label>
+
+                    <select id="editStatus" required>
+                        <option value="active">Actif</option>
+                        <option value="inactive">Inactif</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editPassword">
+                        Nouveau mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="editPassword"
+                        minlength="8"
+                        maxlength="128"
+                        placeholder="Laisser vide pour ne pas modifier"
+                    >
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn-success"
+                    id="editButton"
+                >
+                    Enregistrer les modifications
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="closeModal('editModal')"
+                >
+                    Annuler
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const SUPABASE_URL =
+        "https://pturkucczqqioivapjcr.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_GO8o-jJp97DG0poviRApzQ_v3CgaqRT";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    let currentUser = null;
+    let currentProfile = null;
+    let allUsers = [];
+
+
+    /* =========================================================
+       OUTILS
+    ========================================================= */
+
+    function showMessage(message, type = "success") {
+
+        const element =
+            document.getElementById("message");
+
+        element.textContent = message;
+
+        element.className =
+            "message " + type;
+
+        setTimeout(() => {
+            element.className = "message";
+        }, 6000);
+    }
+
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+            return "—";
+        }
+
+        const date = new Date(dateValue);
+
+        if (Number.isNaN(date.getTime())) {
+            return "—";
+        }
+
+        return date.toLocaleDateString(
+            "fr-FR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+    }
+
+
+    function roleLabel(role) {
+
+        const roles = {
+
+            super_administrateur:
+                "Super Administrateur",
+
+            administrateur:
+                "Administrateur",
+
+            responsable_se:
+                "Responsable S&E",
+
+            gestionnaire_projet:
+                "Gestionnaire de projet",
+
+            agent_terrain:
+                "Agent de terrain",
+
+            utilisateur_autorise:
+                "Utilisateur autorisé"
+        };
+
+        return roles[role] || role || "—";
+    }
+
+
+    function statusLabel(status) {
+
+        if (status === "active") {
+            return "Actif";
+        }
+
+        if (status === "inactive") {
+            return "Inactif";
+        }
+
+        return status || "—";
+    }
+
+
+    function closeModal(id) {
+
+        document
+            .getElementById(id)
+            .classList.remove("show");
+    }
+
+
+    function openModal(id) {
+
+        document
+            .getElementById(id)
+            .classList.add("show");
+    }
+
+
+    /* =========================================================
+       SESSION
+    ========================================================= */
+
+    async function checkSession() {
+
+        const {
+            data: {
+                session
+            }
+        } = await supabaseClient
+            .auth
+            .getSession();
+
+        if (!session) {
+
+            window.location.href =
+                "./index.html";
+
+            return false;
+        }
+
+        currentUser =
+            session.user;
+
+        return true;
+    }
+
+
+    /* =========================================================
+       PROFIL DU CONNECTÉ
+    ========================================================= */
+
+    async function loadCurrentProfile() {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("user_profiles")
+            .select(
+                "id,email,full_name,phone,role,status"
+            )
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+        if (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Impossible de vérifier votre profil.",
+                "error"
+            );
+
+            return false;
+        }
+
+        currentProfile =
+            data;
+
+        const isSuperAdmin =
+            currentProfile &&
+            currentProfile.role ===
+                "super_administrateur" &&
+            currentProfile.status ===
+                "active";
+
+
+        const adminInfo =
+            document.getElementById(
+                "adminInfo"
+            );
+
+        const createSection =
+            document.getElementById(
+                "createSection"
+            );
+
+        const actionsHeader =
+            document.getElementById(
+                "actionsHeader"
+            );
+
+
+        if (isSuperAdmin) {
+
+            adminInfo.style.display =
+                "block";
+
+            adminInfo.textContent =
+                "Vous êtes connecté en tant que Super Administrateur. Vous disposez des droits de gestion des comptes.";
+
+            createSection.style.display =
+                "block";
+
+            actionsHeader.style.display =
+                "";
+
+        } else {
+
+            adminInfo.style.display =
+                "block";
+
+            adminInfo.textContent =
+                "Mode consultation : les actions de gestion des comptes sont réservées au Super Administrateur.";
+
+            createSection.style.display =
+                "none";
+
+            actionsHeader.style.display =
+                "none";
+        }
+
+        return true;
+    }
+
+
+    /* =========================================================
+       CHARGEMENT UTILISATEURS
+    ========================================================= */
+
+    async function loadUsers() {
+
+        const tbody =
+            document.getElementById(
+                "usersTableBody"
+            );
+
+        tbody.innerHTML =
+            `<tr>
+                <td colspan="7" class="loading">
+                    Chargement des utilisateurs...
+                </td>
+            </tr>`;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("user_profiles")
+            .select(
+                "id,full_name,email,phone,role,status,created_at"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            tbody.innerHTML =
+                `<tr>
+                    <td colspan="7" class="empty">
+                        Erreur lors du chargement des utilisateurs.
+                    </td>
+                </tr>`;
+
+            showMessage(
+                "Erreur : " + error.message,
+                "error"
+            );
+
+            return;
+        }
+
+
+        allUsers =
+            data || [];
+
+        applyFilters();
+    }
+
+
+    /* =========================================================
+       AFFICHAGE
+    ========================================================= */
+
+    function renderUsers(users) {
+
+        const tbody =
+            document.getElementById(
+                "usersTableBody"
+            );
+
+        const isSuperAdmin =
+            currentProfile &&
+            currentProfile.role ===
+                "super_administrateur" &&
+            currentProfile.status ===
+                "active";
+
+
+        if (!users.length) {
+
+            tbody.innerHTML =
+                `<tr>
+                    <td colspan="7" class="empty">
+                        Aucun utilisateur trouvé.
+                    </td>
+                </tr>`;
+
+            return;
+        }
+
+
+        tbody.innerHTML =
+            users.map(user => {
+
+                const isSelf =
+                    user.id === currentUser.id;
+
+
+                let actions = "";
+
+
+                if (isSuperAdmin) {
+
+                    actions += `
+                        <button
+                            class="btn-info"
+                            onclick="viewUser('${user.id}')"
+                            title="Voir"
+                        >
+                            👁 Voir
+                        </button>
+
+                        <button
+                            class="btn-warning"
+                            onclick="editUser('${user.id}')"
+                            title="Modifier"
+                        >
+                            ✏️ Modifier
+                        </button>
+                    `;
+
+
+                    if (!isSelf) {
+
+                        if (user.status === "active") {
+
+                            actions += `
+                                <button
+                                    class="btn-warning"
+                                    onclick="blockUser('${user.id}')"
+                                    title="Bloquer"
+                                >
+                                    🔒 Bloquer
+                                </button>
+                            `;
+
+                        } else {
+
+                            actions += `
+                                <button
+                                    class="btn-success"
+                                    onclick="unblockUser('${user.id}')"
+                                    title="Débloquer"
+                                >
+                                    🔓 Débloquer
+                                </button>
+                            `;
+                        }
+
+
+                        actions += `
+                            <button
+                                class="btn-danger"
+                                onclick="deleteUser('${user.id}')"
+                                title="Supprimer"
+                            >
+                                🗑 Supprimer
+                            </button>
+                        `;
+
+                    } else {
+
+                        actions += `
+                            <span
+                                style="
+                                    font-size:11px;
+                                    color:#64748b;
+                                    display:inline-block;
+                                    padding:7px;
+                                "
+                            >
+                                Votre compte
+                            </span>
+                        `;
+                    }
+
+                } else {
+
+                    actions = "—";
+                }
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(user.full_name || "—")}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(user.email || "—")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(user.phone || "—")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(roleLabel(user.role))}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="badge ${
+                                    user.status === "active"
+                                        ? "badge-active"
+                                        : "badge-inactive"
+                                }"
+                            >
+                                ${escapeHtml(
+                                    statusLabel(user.status)
+                                )}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            ${formatDate(user.created_at)}
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+                                ${actions}
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+    }
+
+
+    /* =========================================================
+       FILTRES
+    ========================================================= */
+
+    function applyFilters() {
+
+        const search =
+            document
+                .getElementById(
+                    "searchInput"
+                )
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const role =
+            document
+                .getElementById(
+                    "roleFilter"
+                )
+                .value;
+
+
+        const status =
+            document
+                .getElementById(
+                    "statusFilter"
+                )
+                .value;
+
+
+        const filtered =
+            allUsers.filter(user => {
+
+                const matchesSearch =
+                    !search ||
+                    (user.full_name || "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    (user.email || "")
+                        .toLowerCase()
+                        .includes(search);
+
+
+                const matchesRole =
+                    !role ||
+                    user.role === role;
+
+
+                const matchesStatus =
+                    !status ||
+                    user.status === status;
+
+
+                return (
+                    matchesSearch &&
+                    matchesRole &&
+                    matchesStatus
+                );
+            });
+
+
+        renderUsers(filtered);
+    }
+
+
+    /* =========================================================
+       VOIR
+    ========================================================= */
+
+    function viewUser(id) {
+
+        const user =
+            allUsers.find(
+                item => item.id === id
+            );
+
+
+        if (!user) {
+
+            showMessage(
+                "Utilisateur introuvable.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        document.getElementById(
+            "viewContent"
+        ).innerHTML = `
+
+            <div class="detail-grid">
+
+                <div class="detail-item">
+                    <strong>Nom complet</strong>
+                    <span>
+                        ${escapeHtml(user.full_name || "—")}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <strong>E-mail</strong>
+                    <span>
+                        ${escapeHtml(user.email || "—")}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <strong>Téléphone</strong>
+                    <span>
+                        ${escapeHtml(user.phone || "—")}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <strong>Rôle</strong>
+                    <span>
+                        ${escapeHtml(roleLabel(user.role))}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <strong>Statut</strong>
+                    <span>
+                        ${escapeHtml(statusLabel(user.status))}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <strong>Date de création</strong>
+                    <span>
+                        ${formatDate(user.created_at)}
+                    </span>
+                </div>
+
+                <div class="detail-item" style="grid-column:1/-1;">
+                    <strong>ID utilisateur</strong>
+                    <span>
+                        ${escapeHtml(user.id)}
+                    </span>
+                </div>
+
+            </div>
+        `;
+
+
+        openModal("viewModal");
+    }
+
+
+    /* =========================================================
+       MODIFICATION
+    ========================================================= */
+
+    function editUser(id) {
+
+        const user =
+            allUsers.find(
+                item => item.id === id
+            );
+
+
+        if (!user) {
+
+            showMessage(
+                "Utilisateur introuvable.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        document.getElementById(
+            "editUserId"
+        ).value = user.id;
+
+
+        document.getElementById(
+            "editFullName"
+        ).value =
+            user.full_name || "";
+
+
+        document.getElementById(
+            "editEmail"
+        ).value =
+            user.email || "";
+
+
+        document.getElementById(
+            "editPhone"
+        ).value =
+            user.phone || "";
+
+
+        document.getElementById(
+            "editRole"
+        ).value =
+            user.role || "utilisateur_autorise";
+
+
+        document.getElementById(
+            "editStatus"
+        ).value =
+            user.status || "active";
+
+
+        document.getElementById(
+            "editPassword"
+        ).value = "";
+
+
+        openModal("editModal");
+    }
+
+
+    async function submitEdit(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "editUserId"
+            ).value;
+
+
+        const full_name =
+            document.getElementById(
+                "editFullName"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "editEmail"
+            ).value.trim();
+
+
+        const phone =
+            document.getElementById(
+                "editPhone"
+            ).value.trim();
+
+
+        const role =
+            document.getElementById(
+                "editRole"
+            ).value;
+
+
+        const status =
+            document.getElementById(
+                "editStatus"
+            ).value;
+
+
+        const password =
+            document.getElementById(
+                "editPassword"
+            ).value;
+
+
+        const button =
+            document.getElementById(
+                "editButton"
+            );
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Enregistrement...";
+
+
+        try {
+
+            const payload = {
+
+                action: "update",
+
+                target_user_id: id,
+
+                full_name,
+
+                email,
+
+                phone: phone || null,
+
+                role,
+
+                status
+            };
+
+
+            if (password) {
+                payload.password =
+                    password;
+            }
+
+
+            await callManageUser(
+                payload
+            );
+
+
+            closeModal(
+                "editModal"
+            );
+
+
+            showMessage(
+                "Utilisateur modifié avec succès."
+            );
+
+
+            await loadUsers();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message ||
+                "La modification a échoué.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Enregistrer les modifications";
+        }
+    }
+
+
+    /* =========================================================
+       BLOCAGE
+    ========================================================= */
+
+    async function blockUser(id) {
+
+        const user =
+            allUsers.find(
+                item => item.id === id
+            );
+
+
+        if (!user) {
+            return;
+        }
+
+
+        if (id === currentUser.id) {
+
+            showMessage(
+                "Vous ne pouvez pas bloquer votre propre compte.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const confirmation =
+            confirm(
+                `Voulez-vous vraiment bloquer le compte de ${user.full_name || user.email} ?`
+            );
+
+
+        if (!confirmation) {
+            return;
+        }
+
+
+        try {
+
+            await callManageUser({
+
+                action: "block",
+
+                target_user_id: id
+            });
+
+
+            showMessage(
+                "Utilisateur bloqué avec succès."
+            );
+
+
+            await loadUsers();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message ||
+                "Le blocage a échoué.",
+                "error"
+            );
+        }
+    }
+
+
+    /* =========================================================
+       DEBLOCAGE
+    ========================================================= */
+
+    async function unblockUser(id) {
+
+        const user =
+            allUsers.find(
+                item => item.id === id
+            );
+
+
+        if (!user) {
+            return;
+        }
+
+
+        const confirmation =
+            confirm(
+                `Voulez-vous vraiment débloquer le compte de ${user.full_name || user.email} ?`
+            );
+
+
+        if (!confirmation) {
+            return;
+        }
+
+
+        try {
+
+            await callManageUser({
+
+                action: "unblock",
+
+                target_user_id: id
+            });
+
+
+            showMessage(
+                "Utilisateur débloqué avec succès."
+            );
+
+
+            await loadUsers();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message ||
+                "Le déblocage a échoué.",
+                "error"
+            );
+        }
+    }
+
+
+    /* =========================================================
+       SUPPRESSION
+    ========================================================= */
+
+    async function deleteUser(id) {
+
+        const user =
+            allUsers.find(
+                item => item.id === id
+            );
+
+
+        if (!user) {
+            return;
+        }
+
+
+        if (id === currentUser.id) {
+
+            showMessage(
+                "Vous ne pouvez pas supprimer votre propre compte.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const firstConfirmation =
+            confirm(
+                `ATTENTION : vous êtes sur le point de supprimer définitivement le compte de ${user.full_name || user.email}.`
+            );
+
+
+        if (!firstConfirmation) {
+            return;
+        }
+
+
+        const secondConfirmation =
+            confirm(
+                "Cette opération supprimera le compte d'authentification et son profil. Voulez-vous réellement continuer ?"
+            );
+
+
+        if (!secondConfirmation) {
+            return;
+        }
+
+
+        try {
+
+            await callManageUser({
+
+                action: "delete",
+
+                target_user_id: id
+            });
+
+
+            showMessage(
+                "Utilisateur supprimé avec succès."
+            );
+
+
+            await loadUsers();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message ||
+                "La suppression a échoué.",
+                "error"
+            );
+        }
+    }
+
+
+    /* =========================================================
+       APPEL EDGE FUNCTION MANAGE
+    ========================================================= */
+
+    async function callManageUser(payload) {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .functions
+            .invoke(
+                "manage-ap2md-user",
+                {
+                    body: payload
+                }
+            );
+
+
+        if (!error) {
+
+            if (
+                data &&
+                data.success === false
+            ) {
+
+                throw new Error(
+                    data.error ||
+                    "L'opération a échoué."
+                );
+            }
+
+            return data;
+        }
+
+
+        let message =
+            error.message ||
+            "Erreur lors de l'opération.";
+
+
+        try {
+
+            if (
+                error.context &&
+                typeof error.context.json ===
+                    "function"
+            ) {
+
+                const body =
+                    await error.context.json();
+
+                if (body && body.error) {
+                    message =
+                        body.error;
+                }
+            }
+
+        } catch (_) {
+            // On conserve le message initial.
+        }
+
+
+        throw new Error(message);
+    }
+
+
+    /* =========================================================
+       CREATION
+    ========================================================= */
+
+    async function createUser(event) {
+
+        event.preventDefault();
+
+
+        const full_name =
+            document.getElementById(
+                "full_name"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value.trim();
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value.trim();
+
+
+        const role =
+            document.getElementById(
+                "role"
+            ).value;
+
+
+        const status =
+            document.getElementById(
+                "status"
+            ).value;
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+        const button =
+            document.getElementById(
+                "createButton"
+            );
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Création en cours...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .functions
+                .invoke(
+                    "create-ap2md-user",
+                    {
+                        body: {
+
+                            email,
+
+                            password,
+
+                            full_name,
+
+                            phone:
+                                phone || null,
+
+                            role,
+
+                            status
+                        }
+                    }
+                );
+
+
+            if (error) {
+
+                let message =
+                    error.message ||
+                    "La création a échoué.";
+
+
+                try {
+
+                    if (
+                        error.context &&
+                        typeof error.context.json ===
+                            "function"
+                    ) {
+
+                        const body =
+                            await error.context.json();
+
+                        if (body && body.error) {
+                            message =
+                                body.error;
+                        }
+                    }
+
+                } catch (_) {}
+
+                throw new Error(
+                    message
+                );
+            }
+
+
+            if (
+                data &&
+                data.success === false
+            ) {
+
+                throw new Error(
+                    data.error ||
+                    "La création a échoué."
+                );
+            }
+
+
+            document
+                .getElementById(
+                    "createForm"
+                )
+                .reset();
+
+
+            showMessage(
+                "Utilisateur créé avec succès."
+            );
+
+
+            await loadUsers();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                error.message ||
+                "La création de l'utilisateur a échoué.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Ajouter l'utilisateur";
+        }
+    }
+
+
+    /* =========================================================
+       INITIALISATION
+    ========================================================= */
+
+    async function init() {
+
+        const sessionOk =
+            await checkSession();
+
+
+        if (!sessionOk) {
+            return;
+        }
+
+
+        const profileOk =
+            await loadCurrentProfile();
+
+
+        if (!profileOk) {
+            return;
+        }
+
+
+        await loadUsers();
+    }
+
+
+    /* =========================================================
+       EVENEMENTS
+    ========================================================= */
+
+    document
+        .getElementById(
+            "createForm"
+        )
+        .addEventListener(
+            "submit",
+            createUser
+        );
+
+
+    document
+        .getElementById(
+            "editForm"
+        )
+        .addEventListener(
+            "submit",
+            submitEdit
+        );
+
+
+    document
+        .getElementById(
+            "viewModal"
+        )
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target ===
+                    this
+                ) {
+
+                    closeModal(
+                        "viewModal"
+                    );
+                }
+            }
+        );
+
+
+    document
+        .getElementById(
+            "editModal"
+        )
+        .addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target ===
+                    this
+                ) {
+
+                    closeModal(
+                        "editModal"
+                    );
+                }
+            }
+        );
+
+
+    init();
+
+</script>
+
+</body>
+</html>
