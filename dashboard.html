@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tableau de bord - AP2MD CONNECT PRO</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .brand h1 {
+            color: #0b5cab;
+            font-size: 23px;
+        }
+
+        .brand p {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .user-area {
+            text-align: right;
+        }
+
+        #userEmail {
+            display: block;
+            color: #475569;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .logout {
+            border: none;
+            background: #dc2626;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            color: #0b5cab;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .module {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            min-height: 125px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            border: 1px solid #eef2f7;
+            text-decoration: none;
+            color: #1f2937;
+            transition: 0.2s;
+        }
+
+        .module:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(0,0,0,0.10);
+            border-color: #0b5cab;
+        }
+
+        .icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .module h3 {
+            color: #0b5cab;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .module p {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .admin {
+            border-left: 5px solid #0b5cab;
+        }
+
+        footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin: 35px 0 20px;
+        }
+
+        @media (max-width: 1000px) {
+            .modules {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            header {
+                align-items: flex-start;
+            }
+
+            .user-area {
+                text-align: right;
+            }
+
+            .modules {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .brand h1 {
+                font-size: 19px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+            }
+
+            .user-area {
+                text-align: left;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo-box">
+            <img
+                src="./assets/logo-ap2md-officiel-2.png"
+                alt="Logo officiel AP2MD-Douké"
+            >
+        </div>
+
+        <div>
+            <h1>AP2MD CONNECT PRO</h1>
+            <p>Plateforme de gestion, suivi-évaluation et pilotage</p>
+        </div>
+
+    </div>
+
+    <div class="user-area">
+
+        <span id="userEmail">
+            Chargement...
+        </span>
+
+        <button
+            class="logout"
+            onclick="logout()">
+            Déconnexion
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <section class="welcome">
+
+        <h2>Tableau de bord</h2>
+
+        <p>
+            Bienvenue sur AP2MD CONNECT PRO.
+            Sélectionnez un module pour accéder à ses fonctionnalités.
+        </p>
+
+    </section>
+
+
+    <section class="modules">
+
+
+        <!-- UTILISATEURS -->
+
+        <a
+            href="./utilisateurs.html"
+            class="module admin">
+
+            <div class="icon">🔑</div>
+
+            <h3>
+                Gestion des comptes, rôles et accès
+            </h3>
+
+            <p>
+                Gérer les utilisateurs, les rôles,
+                les statuts et les permissions.
+            </p>
+
+        </a>
+
+
+        <!-- PROJETS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📁</div>
+
+            <h3>Projets</h3>
+
+            <p>
+                Gestion et suivi des projets AP2MD.
+            </p>
+
+        </a>
+
+
+        <!-- GROUPEMENTS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">👥</div>
+
+            <h3>Groupements</h3>
+
+            <p>
+                Gestion des groupements bénéficiaires.
+            </p>
+
+        </a>
+
+
+        <!-- BENEFICIAIRES -->
+
+        <a href="#" class="module">
+
+            <div class="icon">👤</div>
+
+            <h3>Bénéficiaires</h3>
+
+            <p>
+                Gestion et suivi des bénéficiaires.
+            </p>
+
+        </a>
+
+
+        <!-- ACTIVITES -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📊</div>
+
+            <h3>Activités</h3>
+
+            <p>
+                Planification et suivi des activités.
+            </p>
+
+        </a>
+
+
+        <!-- INDICATEURS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">🎯</div>
+
+            <h3>Indicateurs</h3>
+
+            <p>
+                Gestion des indicateurs de performance.
+            </p>
+
+        </a>
+
+
+        <!-- SUIVI INDICATEURS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📈</div>
+
+            <h3>Suivi des indicateurs</h3>
+
+            <p>
+                Suivi des valeurs prévues et réalisées.
+            </p>
+
+        </a>
+
+
+        <!-- KOBO -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📥</div>
+
+            <h3>Données Kobo</h3>
+
+            <p>
+                Importation et gestion des données Kobo.
+            </p>
+
+        </a>
+
+
+        <!-- PUBLICATIONS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📰</div>
+
+            <h3>Publications</h3>
+
+            <p>
+                Gestion des publications institutionnelles.
+            </p>
+
+        </a>
+
+
+        <!-- MEDIAS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">🎥</div>
+
+            <h3>Médias</h3>
+
+            <p>
+                Photos, vidéos et contenus multimédias.
+            </p>
+
+        </a>
+
+
+        <!-- DOCUMENTS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📄</div>
+
+            <h3>Documents</h3>
+
+            <p>
+                Gestion des documents et rapports.
+            </p>
+
+        </a>
+
+
+        <!-- FORMATIONS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">🎓</div>
+
+            <h3>Formations</h3>
+
+            <p>
+                Gestion des formations et participants.
+            </p>
+
+        </a>
+
+
+        <!-- BUDGET -->
+
+        <a href="#" class="module">
+
+            <div class="icon">💰</div>
+
+            <h3>Budget</h3>
+
+            <p>
+                Suivi budgétaire et financier.
+            </p>
+
+        </a>
+
+
+        <!-- RAPPORTS -->
+
+        <a href="#" class="module">
+
+            <div class="icon">📑</div>
+
+            <h3>Rapports</h3>
+
+            <p>
+                Gestion et archivage des rapports.
+            </p>
+
+        </a>
+
+
+        <!-- ALERTES -->
+
+        <a href="#" class="module">
+
+            <div class="icon">🚨</div>
+
+            <h3>Alertes</h3>
+
+            <p>
+                Suivi des alertes et actions recommandées.
+            </p>
+
+        </a>
+
+
+    </section>
+
+
+    <footer>
+        AP2MD CONNECT PRO — ONG AP2MD-Douké
+    </footer>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://pturkucczqqioivapjcr.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_GO8o-jJp97DG0poviRApzQ_v3CgaqRT";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+async function checkSession() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+
+    if (error || !user) {
+
+        window.location.href =
+            "./index.html";
+
+        return;
+    }
+
+
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        user.email;
+
+}
+
+
+async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+        "./index.html";
+
+}
+
+
+checkSession();
+
+</script>
+
+</body>
+</html>
