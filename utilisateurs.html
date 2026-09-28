@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Utilisateurs - AP2MD CONNECT PRO</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-box {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .header-text h1 {
+            color: #0b5cab;
+            font-size: 23px;
+        }
+
+        .header-text p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 25px auto;
+            padding: 0 18px;
+        }
+
+        .back {
+            margin-bottom: 18px;
+        }
+
+        .back a {
+            color: #0b5cab;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        h2 {
+            color: #0b5cab;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 17px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .primary {
+            background: #0b5cab;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #084a8c;
+        }
+
+        .secondary {
+            background: #e8f1fb;
+            color: #0b5cab;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0b5cab;
+            color: white;
+            padding: 13px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .role {
+            color: #0b5cab;
+            font-weight: bold;
+        }
+
+        .badge {
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        .form-note {
+            background: #eff6ff;
+            border-left: 4px solid #0b5cab;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #334155;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .success-note {
+            background: #dcfce7;
+            border-left: 4px solid #16a34a;
+            color: #166534;
+        }
+
+        .error-note {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 800px) {
+            .filters,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .header-text h1 {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo-box">
+        <img
+            src="./assets/logo-ap2md-officiel-2.png"
+            alt="Logo officiel AP2MD-Douké"
+        >
+    </div>
+
+    <div class="header-text">
+        <h1>AP2MD CONNECT PRO</h1>
+        <p>Gestion des comptes, rôles et accès</p>
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="back">
+        <a href="./dashboard.html">
+            ← Retour au tableau de bord
+        </a>
+    </div>
+
+
+    <div class="card">
+
+        <h2>Utilisateurs</h2>
+
+        <p class="description">
+            Gestion centralisée des utilisateurs de la plateforme
+            AP2MD CONNECT PRO.
+        </p>
+
+        <div class="actions">
+
+            <button
+                class="primary"
+                onclick="showAddUserForm()">
+                + Ajouter un utilisateur
+            </button>
+
+            <button
+                class="secondary"
+                onclick="loadUsers()">
+                Actualiser
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="addUserForm"
+        class="card hidden">
+
+        <h2>Ajouter un utilisateur</h2>
+
+        <p class="description">
+            Renseignez les informations du nouvel utilisateur.
+        </p>
+
+        <div
+            id="formMessage"
+            class="form-note">
+            Le compte sera créé de manière sécurisée.
+            Seul un super-administrateur actif peut effectuer cette opération.
+        </div>
+
+
+        <form
+            id="userForm"
+            onsubmit="createUser(event)">
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Nom complet *
+                    </label>
+
+                    <input
+                        id="fullName"
+                        type="text"
+                        placeholder="Exemple : Jean Dupont"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Adresse e-mail *
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="exemple@email.com"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Téléphone
+                    </label>
+
+                    <input
+                        id="phone"
+                        type="tel"
+                        placeholder="Exemple : +236 70 00 00 00">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="role">
+                        Rôle *
+                    </label>
+
+                    <select
+                        id="role"
+                        required>
+
+                        <option value="">
+                            Sélectionner un rôle
+                        </option>
+
+                        <option value="administrateur">
+                            Administrateur
+                        </option>
+
+                        <option value="responsable_se">
+                            Responsable S&E
+                        </option>
+
+                        <option value="gestionnaire_projet">
+                            Gestionnaire projet
+                        </option>
+
+                        <option value="agent_terrain">
+                            Agent terrain
+                        </option>
+
+                        <option value="utilisateur_autorise">
+                            Utilisateur autorisé
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="status">
+                        Statut *
+                    </label>
+
+                    <select
+                        id="status"
+                        required>
+
+                        <option value="active">
+                            Actif
+                        </option>
+
+                        <option value="inactive">
+                            Inactif
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Mot de passe initial *
+                    </label>
+
+                    <input
+                        id="password"
+                        type="password"
+                        minlength="8"
+                        placeholder="Minimum 8 caractères"
+                        required>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <div class="actions">
+
+                        <button
+                            id="saveUserButton"
+                            type="submit"
+                            class="primary">
+                            Enregistrer
+                        </button>
+
+                        <button
+                            type="button"
+                            class="secondary"
+                            onclick="hideAddUserForm()">
+                            Annuler
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="filters">
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Rechercher un nom ou un email..."
+                oninput="filterUsers()">
+
+            <select
+                id="roleFilter"
+                onchange="filterUsers()">
+
+                <option value="">
+                    Tous les rôles
+                </option>
+
+                <option value="super_administrateur">
+                    Super administrateur
+                </option>
+
+                <option value="administrateur">
+                    Administrateur
+                </option>
+
+                <option value="responsable_se">
+                    Responsable S&E
+                </option>
+
+                <option value="gestionnaire_projet">
+                    Gestionnaire projet
+                </option>
+
+                <option value="agent_terrain">
+                    Agent terrain
+                </option>
+
+                <option value="utilisateur_autorise">
+                    Utilisateur autorisé
+                </option>
+
+            </select>
+
+            <select
+                id="statusFilter"
+                onchange="filterUsers()">
+
+                <option value="">
+                    Tous les statuts
+                </option>
+
+                <option value="active">
+                    Actif
+                </option>
+
+                <option value="inactive">
+                    Inactif
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Nom complet
+                    </th>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <th>
+                        Téléphone
+                    </th>
+
+                    <th>
+                        Rôle
+                    </th>
+
+                    <th>
+                        Statut
+                    </th>
+
+                    <th>
+                        Créé le
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="usersTableBody">
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="message">
+
+                        Chargement des utilisateurs...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://pturkucczqqioivapjcr.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_GO8o-jJp97DG0poviRApzQ_v3CgaqRT";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+let users = [];
+
+
+function showAddUserForm() {
+
+    document
+        .getElementById("addUserForm")
+        .classList.remove("hidden");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+function hideAddUserForm() {
+
+    document
+        .getElementById("addUserForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("userForm")
+        .reset();
+
+    resetFormMessage();
+
+}
+
+
+function roleLabel(role) {
+
+    const roles = {
+
+        super_administrateur:
+            "Super administrateur",
+
+        administrateur:
+            "Administrateur",
+
+        responsable_se:
+            "Responsable S&E",
+
+        gestionnaire_projet:
+            "Gestionnaire projet",
+
+        agent_terrain:
+            "Agent terrain",
+
+        utilisateur_autorise:
+            "Utilisateur autorisé"
+
+    };
+
+    return roles[role] || role;
+
+}
+
+
+function renderUsers(list) {
+
+    const tbody =
+        document.getElementById(
+            "usersTableBody"
+        );
+
+
+    if (!list.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="6"
+                    class="message">
+                    Aucun utilisateur trouvé.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        list.map(user => `
+
+            <tr>
+
+                <td>
+                    ${escapeHtml(user.full_name || "—")}
+                </td>
+
+                <td>
+                    ${escapeHtml(user.email || "—")}
+                </td>
+
+                <td>
+                    ${escapeHtml(user.phone || "—")}
+                </td>
+
+                <td>
+                    <span class="role">
+                        ${escapeHtml(roleLabel(user.role))}
+                    </span>
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        user.status === "active"
+                        ? "active"
+                        : "inactive"
+                    }">
+
+                        ${
+                            user.status === "active"
+                            ? "Actif"
+                            : "Inactif"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    ${
+                        user.created_at
+                        ? new Date(
+                            user.created_at
+                          ).toLocaleDateString(
+                            "fr-FR"
+                          )
+                        : "—"
+                    }
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function filterUsers() {
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value.toLowerCase();
+
+    const role =
+        document.getElementById(
+            "roleFilter"
+        ).value;
+
+    const status =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    const filtered =
+        users.filter(user => {
+
+            const name =
+                (user.full_name || "")
+                .toLowerCase();
+
+            const email =
+                (user.email || "")
+                .toLowerCase();
+
+
+            return (
+
+                (
+                    name.includes(search) ||
+                    email.includes(search)
+                )
+
+                &&
+
+                (
+                    !role ||
+                    user.role === role
+                )
+
+                &&
+
+                (
+                    !status ||
+                    user.status === status
+                )
+
+            );
+
+        });
+
+
+    renderUsers(filtered);
+
+}
+
+
+async function loadUsers() {
+
+    const tbody =
+        document.getElementById(
+            "usersTableBody"
+        );
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="6"
+                class="message">
+                Chargement des utilisateurs...
+            </td>
+        </tr>
+    `;
+
+
+    const {
+        data: { user },
+        error: authError
+    } =
+        await supabaseClient
+        .auth
+        .getUser();
+
+
+    if (authError || !user) {
+
+        window.location.href =
+            "./index.html";
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+        .from("user_profiles")
+        .select(`
+            id,
+            full_name,
+            email,
+            phone,
+            role,
+            status,
+            created_at
+        `)
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur Supabase :",
+            error
+        );
+
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="6"
+                    class="message">
+                    Erreur lors du chargement des utilisateurs.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    users = data || [];
+
+    renderUsers(users);
+
+}
+
+
+function resetFormMessage() {
+
+    const box =
+        document.getElementById(
+            "formMessage"
+        );
+
+    box.className =
+        "form-note";
+
+    box.textContent =
+        "Le compte sera créé de manière sécurisée. Seul un super-administrateur actif peut effectuer cette opération.";
+
+}
+
+
+function showFormMessage(message, type) {
+
+    const box =
+        document.getElementById(
+            "formMessage"
+        );
+
+    box.className =
+        "form-note " +
+        (type === "success"
+            ? "success-note"
+            : "error-note");
+
+    box.textContent = message;
+
+}
+
+
+async function createUser(event) {
+
+    event.preventDefault();
+
+
+    const button =
+        document.getElementById(
+            "saveUserButton"
+        );
+
+
+    const fullName =
+        document.getElementById(
+            "fullName"
+        ).value.trim();
+
+
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
+
+
+    const phone =
+        document.getElementById(
+            "phone"
+        ).value.trim();
+
+
+    const role =
+        document.getElementById(
+            "role"
+        ).value;
+
+
+    const status =
+        document.getElementById(
+            "status"
+        ).value;
+
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+
+    if (
+        !fullName ||
+        !email ||
+        !role ||
+        !status ||
+        password.length < 8
+    ) {
+
+        showFormMessage(
+            "Veuillez remplir correctement tous les champs obligatoires. Le mot de passe doit contenir au moins 8 caractères.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Création en cours...";
+
+
+    showFormMessage(
+        "Création sécurisée du compte en cours...",
+        "success"
+    );
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+            .functions
+            .invoke(
+                "create-ap2md-user",
+                {
+                    body: {
+                        email: email,
+                        password: password,
+                        full_name: fullName,
+                        phone: phone || null,
+                        role: role,
+                        status: status
+                    }
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur Edge Function :",
+                error
+            );
+
+            throw new Error(
+                error.message ||
+                "Erreur lors de la création du compte."
+            );
+
+        }
+
+
+        if (
+            !data ||
+            !data.id
+        ) {
+
+            throw new Error(
+                data?.error ||
+                "La création du compte n'a pas été confirmée."
+            );
+
+        }
+
+
+        showFormMessage(
+            "Utilisateur créé avec succès.",
+            "success"
+        );
+
+
+        document
+            .getElementById("userForm")
+            .reset();
+
+
+        await loadUsers();
+
+
+        setTimeout(() => {
+
+            hideAddUserForm();
+
+        }, 1200);
+
+
+    } catch (error) {
+
+        console.error(
+            "Erreur création utilisateur :",
+            error
+        );
+
+
+        showFormMessage(
+            error.message ||
+            "Une erreur est survenue lors de la création du compte.",
+            "error"
+        );
+
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Enregistrer";
+
+    }
+
+}
+
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
