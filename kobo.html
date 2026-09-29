@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AP2MD CONNECT PRO — Données Kobo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0b5ed7, #087f5b);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(0,0,0,.15);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .brand h1 {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .brand p {
+            font-size: 13px;
+            opacity: .9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button,
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: .2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+
+        button:hover,
+        .btn:hover {
+            transform: translateY(-1px);
+            opacity: .95;
+        }
+
+        button:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-blue {
+            background: #0b5ed7;
+            color: white;
+        }
+
+        .btn-green {
+            background: #198754;
+            color: white;
+        }
+
+        .btn-light {
+            background: white;
+            color: #0b5ed7;
+        }
+
+        .container {
+            width: min(1400px, 94%);
+            margin: 25px auto;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+        }
+
+        .page-title h2 {
+            font-size: 27px;
+            color: #12355b;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #667085;
+        }
+
+        .security-note {
+            background: #e8f4ff;
+            border-left: 5px solid #0b5ed7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        .message {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .message.success {
+            display: block;
+            background: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+
+        .message.error {
+            display: block;
+            background: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
+        .message.info {
+            display: block;
+            background: #cff4fc;
+            color: #055160;
+            border: 1px solid #b6effb;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            border-top: 4px solid #0b5ed7;
+        }
+
+        .stat-card.green {
+            border-top-color: #198754;
+        }
+
+        .stat-card.orange {
+            border-top-color: #fd7e14;
+        }
+
+        .stat-card.red {
+            border-top-color: #dc3545;
+        }
+
+        .stat-label {
+            color: #667085;
+            font-size: 14px;
+            margin-bottom: 9px;
+        }
+
+        .stat-value {
+            font-size: 31px;
+            font-weight: 700;
+            color: #12355b;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .section-title h3 {
+            color: #12355b;
+            font-size: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
+            background: #f7f9fc;
+            border: 1px solid #e4e7ec;
+            border-radius: 8px;
+            padding: 13px;
+        }
+
+        .info-item span {
+            display: block;
+            color: #667085;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .info-item strong {
+            display: block;
+            word-break: break-word;
+            color: #1d2939;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eaecf0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f2f6fb;
+            color: #344054;
+            font-weight: 700;
+        }
+
+        tr:hover td {
+            background: #fafcff;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-success {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .badge-info {
+            background: #cff4fc;
+            color: #055160;
+        }
+
+        .small-btn {
+            padding: 7px 10px;
+            font-size: 12px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px 15px;
+            color: #667085;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #667085;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: min(850px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 14px;
+            box-shadow: 0 15px 45px rgba(0,0,0,.25);
+        }
+
+        .modal-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #eaecf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .modal-header h3 {
+            color: #12355b;
+        }
+
+        .modal-close {
+            background: #f2f4f7;
+            color: #344054;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            padding: 0;
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #667085;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 12px 15px;
+            }
+
+            .brand img {
+                width: 58px;
+                height: 58px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+
+            .container {
+                width: 94%;
+                margin: 18px auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions button,
+            .header-actions .btn {
+                flex: 1;
+            }
+
+            .section {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+
+        <img
+            src="assets/logo-ap2md-officiel-2.png"
+            alt="Logo officiel AP2MD"
+        >
+
+        <div>
+            <h1>AP2MD CONNECT PRO</h1>
+            <p>Données Kobo et synchronisation</p>
+        </div>
+
+    </div>
+
+    <div class="header-actions">
+
+        <button
+            class="btn btn-green"
+            id="syncKoboButton"
+            onclick="syncKoboSubmissions()"
+        >
+            🔄 Synchroniser Kobo
+        </button>
+
+        <button
+            class="btn btn-light"
+            onclick="loadKoboData()"
+        >
+            ↻ Actualiser
+        </button>
+
+        <a
+            href="./dashboard.html"
+            class="btn btn-light"
+        >
+            ← Tableau de bord
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="page-title">
+
+        <h2>Données KoboToolbox</h2>
+
+        <p>
+            Suivi des formulaires, soumissions et synchronisation
+            avec AP2MD CONNECT PRO.
+        </p>
+
+    </div>
+
+
+    <div class="security-note">
+
+        <strong>🔐 Sécurité des données</strong><br>
+
+        La connexion à KoboToolbox est effectuée de manière sécurisée.
+        Le token API Kobo n'est pas stocké dans cette interface :
+        il est conservé dans Supabase Vault et utilisé par le serveur
+        de synchronisation.
+
+    </div>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- KPI -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Soumissions sur Kobo
+            </div>
+
+            <div
+                class="stat-value"
+                id="serverSubmissions"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat-card green">
+
+            <div class="stat-label">
+                Soumissions importées
+            </div>
+
+            <div
+                class="stat-value"
+                id="importedSubmissions"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-label">
+                État de synchronisation
+            </div>
+
+            <div
+                class="stat-value"
+                id="syncStatus"
+                style="font-size:18px;"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat-card red">
+
+            <div class="stat-label">
+                Écart Kobo / plateforme
+            </div>
+
+            <div
+                class="stat-value"
+                id="submissionGap"
+            >
+                —
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATIONS FORMULAIRE -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h3>📋 Informations du formulaire</h3>
+
+        </div>
+
+
+        <div
+            id="collectionInfo"
+            class="info-grid"
+        >
+
+            <div class="info-item">
+                <span>Chargement</span>
+                <strong>...</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FORMULAIRES -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h3>🗂️ Collectes Kobo configurées</h3>
+
+            <button
+                class="btn btn-blue small-btn"
+                onclick="loadCollection()"
+            >
+                Actualiser
+            </button>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Formulaire</th>
+                        <th>Projet</th>
+                        <th>Asset UID</th>
+                        <th>Soumissions</th>
+                        <th>Statut</th>
+                        <th>Dernière synchronisation</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="collectionTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="loading"
+                        >
+                            Chargement...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- SOUMISSIONS -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h3>📊 Soumissions importées</h3>
+
+            <button
+                class="btn btn-blue small-btn"
+                onclick="loadSubmissions()"
+            >
+                Actualiser
+            </button>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID Kobo</th>
+                        <th>UUID</th>
+                        <th>Date de soumission</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="submissionsTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="loading"
+                        >
+                            Chargement...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    AP2MD CONNECT PRO —
+    Département Informatique de l'ONG AP2MD-Douké —
+    Réginald KOYAKELA « Le Miséricordieux »
+
+</footer>
+
+
+<!-- =========================================================
+     MODAL SOUMISSION
+========================================================= -->
+
+<div
+    id="submissionModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>Détail de la soumission Kobo</h3>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('submissionModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="submissionModalBody"
+            class="modal-body"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL COLLECTION
+========================================================= -->
+
+<div
+    id="collectionModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>Détail de la collecte Kobo</h3>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('collectionModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div
+            id="collectionModalBody"
+            class="modal-body"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+    /* =========================================================
+       CONFIGURATION SUPABASE
+    ========================================================= */
+
+    const SUPABASE_URL =
+        "https://pturkucczqqioivapjcr.supabase.co";
+
+
+    /*
+       IMPORTANT :
+       Remplace uniquement cette valeur par la même
+       SUPABASE_KEY publishable que tu utilises déjà
+       dans ton fichier actuel.
+    */
+
+    const SUPABASE_KEY =
+        "VOTRE_CLE_PUBLISHABLE_SUPABASE";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* =========================================================
+       UTILITAIRES
+    ========================================================= */
+
+    function escapeHtml(value) {
+
+        if (value === null ||
+            value === undefined) {
+
+            return "";
+
+        }
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+
+            return "Non disponible";
+
+        }
+
+        const date =
+            new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+
+            return value;
+
+        }
+
+        return date.toLocaleString(
+            "fr-FR",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+
+    }
+
+
+    function clearMessage() {
+
+        const element =
+            document.getElementById("message");
+
+        element.className =
+            "message";
+
+        element.textContent =
+            "";
+
+    }
+
+
+    function showMessage(
+        text,
+        type = "error"
+    ) {
+
+        const element =
+            document.getElementById("message");
+
+        element.className =
+            "message " + type;
+
+        element.textContent =
+            text;
+
+    }
+
+
+    function openModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+        if (modal) {
+
+            modal.classList.add("active");
+
+        }
+
+    }
+
+
+    function closeModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+        if (modal) {
+
+            modal.classList.remove("active");
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target.classList &&
+                event.target.classList.contains("modal")
+            ) {
+
+                event.target.classList.remove("active");
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       SESSION
+    ========================================================= */
+
+    async function checkSession() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (error) {
+
+            console.error(
+                "Erreur session :",
+                error
+            );
+
+            showMessage(
+                "Impossible de vérifier votre session.",
+                "error"
+            );
+
+            return false;
+
+        }
+
+
+        if (!data.session) {
+
+            window.location.href =
+                "./index.html";
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+
+
+    /* =========================================================
+       CHARGEMENT PRINCIPAL
+    ========================================================= */
+
+    async function loadKoboData() {
+
+        clearMessage();
+
+
+        const connected =
+            await checkSession();
+
+
+        if (!connected) {
+
+            return;
+
+        }
+
+
+        await Promise.all([
+            loadCollection(),
+            loadSubmissions()
+        ]);
+
+    }
+
+
+    /* =========================================================
+       CHARGEMENT COLLECTION KOBO
+    ========================================================= */
+
+    async function loadCollection() {
+
+        const table =
+            document.getElementById(
+                "collectionTableBody"
+            );
+
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7" class="loading">
+                    Chargement des collectes Kobo...
+                </td>
+            </tr>
+        `;
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+
+                .from("collecte_kobo")
+
+                .select(`
+                    *,
+                    projects (
+                        id,
+                        project_code,
+                        project_name
+                    )
+                `)
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur collecte_kobo :",
+                error
+            );
+
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        Impossible de charger les données Kobo.
+                    </td>
+                </tr>
+            `;
+
+            showMessage(
+                "Erreur lors du chargement des formulaires Kobo.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const collections =
+            data || [];
+
+
+        renderCollectionTable(
+            collections
+        );
+
+
+        renderCollectionInfo(
+            collections
+        );
+
+    }
+
+
+    /* =========================================================
+       AFFICHAGE COLLECTION
+    ========================================================= */
+
+    function renderCollectionTable(
+        collections
+    ) {
+
+        const table =
+            document.getElementById(
+                "collectionTableBody"
+            );
+
+
+        if (!collections.length) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        Aucun formulaire Kobo configuré.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML =
+            collections
+                .map(
+                    collection => {
+
+                        const status =
+                            collection.sync_status ||
+                            "non synchronisé";
+
+
+                        let badge =
+                            "badge-info";
+
+
+                        if (
+                            status === "success"
+                        ) {
+
+                            badge =
+                                "badge-success";
+
+                        }
+                        else if (
+                            status === "partial"
+                        ) {
+
+                            badge =
+                                "badge-warning";
+
+                        }
+                        else if (
+                            status === "error"
+                        ) {
+
+                            badge =
+                                "badge-danger";
+
+                        }
+
+
+                        const project =
+                            collection.projects;
+
+
+                        return `
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        ${
+                                            escapeHtml(
+                                                collection.nom_formulaire
+                                            )
+                                        }
+                                    </strong>
+                                </td>
+
+
+                                <td>
+                                    ${
+                                        escapeHtml(
+                                            project?.project_code ||
+                                            project?.project_name ||
+                                            "—"
+                                        )
+                                    }
+                                </td>
+
+
+                                <td>
+                                    <small>
+                                        ${
+                                            escapeHtml(
+                                                collection.asset_uid ||
+                                                "—"
+                                            )
+                                        }
+                                    </small>
+                                </td>
+
+
+                                <td>
+                                    <strong>
+                                        ${
+                                            Number(
+                                                collection.submissions_count ||
+                                                0
+                                            )
+                                        }
+                                    </strong>
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="badge ${badge}"
+                                    >
+                                        ${
+                                            escapeHtml(
+                                                status
+                                            )
+                                        }
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+                                    ${
+                                        formatDate(
+                                            collection.date_derniere_synchronisation
+                                        )
+                                    }
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="btn btn-blue small-btn"
+                                        onclick='showCollectionDetails(${JSON.stringify(collection)})'
+                                    >
+                                        Voir
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    /* =========================================================
+       INFORMATIONS COLLECTION
+    ========================================================= */
+
+    function renderCollectionInfo(
+        collections
+    ) {
+
+        const element =
+            document.getElementById(
+                "collectionInfo"
+            );
+
+
+        if (!collections.length) {
+
+            element.innerHTML = `
+                <div class="info-item">
+                    <span>Formulaire</span>
+                    <strong>Aucun formulaire</strong>
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        const collection =
+            collections[0];
+
+
+        const project =
+            collection.projects;
+
+
+        const serverCount =
+            Number(
+                collection.submissions_count ||
+                0
+            );
+
+
+        element.innerHTML = `
+
+            <div class="info-item">
+
+                <span>Formulaire</span>
+
+                <strong>
+                    ${
+                        escapeHtml(
+                            collection.nom_formulaire ||
+                            "—"
+                        )
+                    }
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Projet</span>
+
+                <strong>
+                    ${
+                        escapeHtml(
+                            project?.project_code ||
+                            project?.project_name ||
+                            "—"
+                        )
+                    }
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Asset UID</span>
+
+                <strong>
+                    ${
+                        escapeHtml(
+                            collection.asset_uid ||
+                            "—"
+                        )
+                    }
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Soumissions Kobo</span>
+
+                <strong>
+                    ${serverCount}
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>URL Kobo</span>
+
+                <strong>
+
+                    ${
+                        collection.url_kobo
+                            ? `
+                                <a
+                                    href="${escapeHtml(collection.url_kobo)}"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    Ouvrir Kobo
+                                </a>
+                              `
+                            : "—"
+                    }
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Dernière synchronisation</span>
+
+                <strong>
+                    ${
+                        formatDate(
+                            collection.date_derniere_synchronisation
+                        )
+                    }
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Dernier import</span>
+
+                <strong>
+                    ${
+                        formatDate(
+                            collection.dernier_import
+                        )
+                    }
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>État</span>
+
+                <strong>
+                    ${
+                        escapeHtml(
+                            collection.sync_status ||
+                            "Non synchronisé"
+                        )
+                    }
+                </strong>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       DÉTAIL COLLECTION
+    ========================================================= */
+
+    function showCollectionDetails(
+        collection
+    ) {
+
+        const body =
+            document.getElementById(
+                "collectionModalBody"
+            );
+
+
+        body.innerHTML = `
+
+            <div class="info-grid">
+
+                <div class="info-item">
+                    <span>Formulaire</span>
+                    <strong>
+                        ${
+                            escapeHtml(
+                                collection.nom_formulaire
+                            )
+                        }
+                    </strong>
+                </div>
+
+
+                <div class="info-item">
+                    <span>Asset UID</span>
+                    <strong>
+                        ${
+                            escapeHtml(
+                                collection.asset_uid
+                            )
+                        }
+                    </strong>
+                </div>
+
+
+                <div class="info-item">
+                    <span>Soumissions</span>
+                    <strong>
+                        ${
+                            Number(
+                                collection.submissions_count ||
+                                0
+                            )
+                        }
+                    </strong>
+                </div>
+
+
+                <div class="info-item">
+                    <span>Statut</span>
+                    <strong>
+                        ${
+                            escapeHtml(
+                                collection.sync_status ||
+                                "—"
+                            )
+                        }
+                    </strong>
+                </div>
+
+
+                <div class="info-item">
+                    <span>Dernière synchronisation</span>
+                    <strong>
+                        ${
+                            formatDate(
+                                collection.date_derniere_synchronisation
+                            )
+                        }
+                    </strong>
+                </div>
+
+
+                <div class="info-item">
+                    <span>Dernier import</span>
+                    <strong>
+                        ${
+                            formatDate(
+                                collection.dernier_import
+                            )
+                        }
+                    </strong>
+                </div>
+
+            </div>
+
+
+            ${
+                collection.message_erreur
+                    ? `
+                        <div
+                            style="
+                                margin-top:20px;
+                                background:#f8d7da;
+                                color:#842029;
+                                padding:15px;
+                                border-radius:8px;
+                            "
+                        >
+
+                            <strong>
+                                Message :
+                            </strong>
+
+                            <br>
+
+                            ${
+                                escapeHtml(
+                                    collection.message_erreur
+                                )
+                            }
+
+                        </div>
+                      `
+                    : ""
+            }
+
+        `;
+
+
+        openModal(
+            "collectionModal"
+        );
+
+    }
+
+
+    /* =========================================================
+       CHARGEMENT SOUMISSIONS
+    ========================================================= */
+
+    async function loadSubmissions() {
+
+        const table =
+            document.getElementById(
+                "submissionsTableBody"
+            );
+
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="loading">
+                    Chargement des soumissions...
+                </td>
+            </tr>
+        `;
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+
+                .from("kobo_submissions")
+
+                .select("*")
+
+                .order(
+                    "date_soumission",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur kobo_submissions :",
+                error
+            );
+
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Impossible de charger les soumissions importées.
+                    </td>
+                </tr>
+            `;
+
+            showMessage(
+                "Erreur lors du chargement des soumissions importées.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const submissions =
+            data || [];
+
+
+        renderSubmissions(
+            submissions
+        );
+
+
+        await updateCounters(
+            submissions
+        );
+
+    }
+
+
+    /* =========================================================
+       AFFICHAGE SOUMISSIONS
+    ========================================================= */
+
+    function renderSubmissions(
+        submissions
+    ) {
+
+        const table =
+            document.getElementById(
+                "submissionsTableBody"
+            );
+
+
+        if (!submissions.length) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Aucune soumission Kobo importée pour le moment.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML =
+            submissions
+                .map(
+                    submission => {
+
+                        let badge =
+                            "badge-success";
+
+
+                        if (
+                            submission.import_status ===
+                            "error"
+                        ) {
+
+                            badge =
+                                "badge-danger";
+
+                        }
+                        else if (
+                            submission.import_status !==
+                            "success"
+                        ) {
+
+                            badge =
+                                "badge-warning";
+
+                        }
+
+
+                        return `
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        ${
+                                            escapeHtml(
+                                                submission.kobo_submission_id ||
+                                                "—"
+                                            )
+                                        }
+                                    </strong>
+                                </td>
+
+
+                                <td>
+                                    <small>
+                                        ${
+                                            escapeHtml(
+                                                submission.kobo_uuid ||
+                                                "—"
+                                            )
+                                        }
+                                    </small>
+                                </td>
+
+
+                                <td>
+                                    ${
+                                        formatDate(
+                                            submission.date_soumission
+                                        )
+                                    }
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="badge ${badge}"
+                                    >
+                                        ${
+                                            escapeHtml(
+                                                submission.import_status ||
+                                                "—"
+                                            )
+                                        }
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="btn btn-blue small-btn"
+                                        onclick='showSubmissionDetails(${JSON.stringify(submission)})'
+                                    >
+                                        Voir
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    /* =========================================================
+       COMPTEURS
+    ========================================================= */
+
+    async function updateCounters(
+        submissions
+    ) {
+
+        const imported =
+            submissions.length;
+
+
+        document.getElementById(
+            "importedSubmissions"
+        ).textContent =
+            imported;
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+
+                .from("collecte_kobo")
+
+                .select(
+                    "submissions_count,sync_status,date_derniere_synchronisation"
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+
+                .limit(1);
+
+
+        if (error || !data || !data.length) {
+
+            document.getElementById(
+                "serverSubmissions"
+            ).textContent =
+                "—";
+
+
+            document.getElementById(
+                "submissionGap"
+            ).textContent =
+                "—";
+
+
+            document.getElementById(
+                "syncStatus"
+            ).textContent =
+                "—";
+
+
+            return;
+
+        }
+
+
+        const collection =
+            data[0];
+
+
+        const server =
+            Number(
+                collection.submissions_count ||
+                0
+            );
+
+
+        const gap =
+            server -
+            imported;
+
+
+        document.getElementById(
+            "serverSubmissions"
+        ).textContent =
+            server;
+
+
+        document.getElementById(
+            "submissionGap"
+        ).textContent =
+            gap;
+
+
+        document.getElementById(
+            "syncStatus"
+        ).textContent =
+            collection.sync_status ||
+            "Non synchronisé";
+
+
+        if (gap === 0) {
+
+            document.getElementById(
+                "submissionGap"
+            ).style.color =
+                "#198754";
+
+        }
+        else if (gap > 0) {
+
+            document.getElementById(
+                "submissionGap"
+            ).style.color =
+                "#dc3545";
+
+        }
+
+    }
+
+
+    /* =========================================================
+       DÉTAIL SOUMISSION
+    ========================================================= */
+
+    function showSubmissionDetails(
+        submission
+    ) {
+
+        const body =
+            document.getElementById(
+                "submissionModalBody"
+            );
+
+
+        let submissionData =
+            submission.submission_data;
+
+
+        if (
+            typeof submissionData ===
+            "object"
+        ) {
+
+            submissionData =
+                JSON.stringify(
+                    submissionData,
+                    null,
+                    2
+                );
+
+        }
+
+
+        body.innerHTML = `
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <span>ID Kobo</span>
+
+                    <strong>
+                        ${
+                            escapeHtml(
+                                submission.kobo_submission_id
+                            )
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>UUID</span>
+
+                    <strong>
+                        ${
+                            escapeHtml(
+                                submission.kobo_uuid ||
+                                "—"
+                            )
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>Date</span>
+
+                    <strong>
+                        ${
+                            formatDate(
+                                submission.date_soumission
+                            )
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>Import</span>
+
+                    <strong>
+                        ${
+                            escapeHtml(
+                                submission.import_status ||
+                                "—"
+                            )
+                        }
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <h4
+                style="
+                    margin-top:25px;
+                    margin-bottom:10px;
+                    color:#12355b;
+                "
+            >
+                Données de la soumission
+            </h4>
+
+
+            <pre>${
+                escapeHtml(
+                    submissionData ||
+                    "Aucune donnée."
+                )
+            }</pre>
+
+
+            ${
+                submission.erreur_import
+                    ? `
+                        <div
+                            style="
+                                margin-top:20px;
+                                background:#f8d7da;
+                                color:#842029;
+                                padding:15px;
+                                border-radius:8px;
+                            "
+                        >
+
+                            <strong>
+                                Erreur d'import :
+                            </strong>
+
+                            <br>
+
+                            ${
+                                escapeHtml(
+                                    submission.erreur_import
+                                )
+                            }
+
+                        </div>
+                      `
+                    : ""
+            }
+
+        `;
+
+
+        openModal(
+            "submissionModal"
+        );
+
+    }
+
+
+    /* =========================================================
+       SYNCHRONISATION KOBO
+    ========================================================= */
+
+    async function syncKoboSubmissions() {
+
+        const button =
+            document.getElementById(
+                "syncKoboButton"
+            );
+
+
+        clearMessage();
+
+
+        button.disabled =
+            true;
+
+
+        button.innerHTML =
+            "⏳ Synchronisation...";
+
+
+        try {
+
+            const {
+                data: {
+                    session
+                },
+                error: sessionError
+            } =
+                await supabaseClient.auth.getSession();
+
+
+            if (
+                sessionError ||
+                !session
+            ) {
+
+                throw new Error(
+                    "Votre session a expiré. Veuillez vous reconnecter."
+                );
+
+            }
+
+
+            showMessage(
+                "Synchronisation Kobo en cours...",
+                "info"
+            );
+
+
+            const response =
+                await fetch(
+
+                    SUPABASE_URL +
+                    "/functions/v1/sync-kobo-submissions",
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                session.access_token,
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({})
+
+                    }
+
+                );
+
+
+            let result;
+
+
+            try {
+
+                result =
+                    await response.json();
+
+            }
+            catch {
+
+                result = {};
+
+            }
+
+
+            if (!response.ok) {
+
+                throw new Error(
+
+                    result?.erreur ||
+                    result?.message ||
+                    `La synchronisation a échoué (HTTP ${response.status}).`
+
+                );
+
+            }
+
+
+            const nouvelles =
+                Number(
+                    result.nouvelles_soumissions ||
+                    0
+                );
+
+
+            const misesAJour =
+                Number(
+                    result.soumissions_mises_a_jour ||
+                    0
+                );
+
+
+            const total =
+                Number(
+                    result.soumissions_kobo ||
+                    0
+                );
+
+
+            const erreurs =
+                Array.isArray(
+                    result.erreurs
+                )
+                    ? result.erreurs.length
+                    : 0;
+
+
+            if (erreurs > 0) {
+
+                showMessage(
+
+                    `Synchronisation terminée : ${total} soumission(s) Kobo détectée(s), ${nouvelles} nouvelle(s), ${misesAJour} mise(s) à jour, ${erreurs} erreur(s).`,
+
+                    "error"
+
+                );
+
+            }
+            else {
+
+                showMessage(
+
+                    `Synchronisation terminée : ${total} soumission(s) Kobo détectée(s), ${nouvelles} nouvelle(s), ${misesAJour} mise(s) à jour.`,
+
+                    "success"
+
+                );
+
+            }
+
+
+            await loadKoboData();
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Erreur synchronisation Kobo :",
+                error
+            );
+
+
+            showMessage(
+
+                error instanceof Error
+                    ? error.message
+                    : "Erreur lors de la synchronisation Kobo.",
+
+                "error"
+
+            );
+
+        }
+        finally {
+
+            button.disabled =
+                false;
+
+
+            button.innerHTML =
+                "🔄 Synchroniser Kobo";
+
+        }
+
+    }
+
+
+    /* =========================================================
+       DÉMARRAGE
+    ========================================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async function() {
+
+            await loadKoboData();
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
