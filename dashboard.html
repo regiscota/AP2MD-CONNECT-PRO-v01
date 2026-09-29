@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AP2MD CONNECT PRO - Tableau de bord</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8fb;
+            color: #17324d;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0066a1, #008c95);
+            color: white;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.15);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            background: white;
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .brand h1 {
+            margin: 0 0 5px;
+            font-size: 21px;
+        }
+
+        .brand p {
+            margin: 0;
+            font-size: 13px;
+            opacity: .9;
+        }
+
+        .user-box {
+            text-align: right;
+            font-size: 13px;
+        }
+
+        #userName {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .container {
+            width: min(1400px, 94%);
+            margin: auto;
+            padding: 25px 0 40px;
+        }
+
+        .welcome {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border-left: 5px solid #008c95;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+        }
+
+        .welcome h2 {
+            margin: 0 0 8px;
+            color: #0066a1;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #657685;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        button,
+        .btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .primary {
+            background: #0066a1;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #004f7d;
+        }
+
+        .success {
+            background: #008c95;
+            color: white;
+        }
+
+        .success:hover {
+            background: #006d74;
+        }
+
+        .danger {
+            background: #c62828;
+            color: white;
+        }
+
+        .danger:hover {
+            background: #9f1f1f;
+        }
+
+        .secondary {
+            background: #e8eef3;
+            color: #17324d;
+        }
+
+        .section-title {
+            color: #0066a1;
+            font-size: 20px;
+            margin: 30px 0 15px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.06);
+        }
+
+        .stat-label {
+            color: #6c7d8b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #0066a1;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            border-top: 4px solid #0066a1;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.10);
+        }
+
+        .card.kobo {
+            border-top-color: #008c95;
+        }
+
+        .card.audit {
+            border-top-color: #5e35b1;
+        }
+
+        .card.users {
+            border-top-color: #0066a1;
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            color: #17324d;
+        }
+
+        .card p {
+            color: #687987;
+            font-size: 14px;
+            line-height: 1.55;
+            min-height: 66px;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 5px 10px;
+            margin-bottom: 12px;
+        }
+
+        .status-ok {
+            background: #dff5e8;
+            color: #18733c;
+        }
+
+        .status-wait {
+            background: #fff2cc;
+            color: #876400;
+        }
+
+        .status-error {
+            background: #fde1e1;
+            color: #a32121;
+        }
+
+        footer {
+            background: #17324d;
+            color: white;
+            text-align: center;
+            padding: 22px;
+            font-size: 13px;
+        }
+
+        footer strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        footer span {
+            opacity: .8;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .user-box {
+                text-align: left;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+
+        <img
+            src="assets/logo-ap2md-officiel-2.png"
+            alt="Logo officiel AP2MD"
+            class="logo"
+        >
+
+        <div>
+            <h1>AP2MD CONNECT PRO</h1>
+            <p>
+                Plateforme numérique de gestion,
+                suivi-évaluation et capitalisation
+            </p>
+        </div>
+
+    </div>
+
+    <div class="user-box">
+        <div id="userName">Chargement...</div>
+        <div id="userRole">Utilisateur</div>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <section class="welcome">
+
+        <h2>Tableau de bord</h2>
+
+        <p>
+            Bienvenue sur AP2MD CONNECT PRO.
+            Retrouvez ici les principaux modules de gestion,
+            de suivi-évaluation, de collecte Kobo et
+            d'administration de la plateforme.
+        </p>
+
+        <div class="actions">
+
+            <button
+                class="primary"
+                id="refreshButton"
+                onclick="loadDashboard()"
+            >
+                Actualiser
+            </button>
+
+            <button
+                class="danger"
+                onclick="logout()"
+            >
+                Déconnexion
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Vue d'ensemble
+    </h2>
+
+    <section class="stats">
+
+        <div class="stat">
+            <div class="stat-label">Projets</div>
+            <div class="stat-value" id="projectsCount">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Groupements</div>
+            <div class="stat-value" id="groupementsCount">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Bénéficiaires</div>
+            <div class="stat-value" id="beneficiairesCount">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Activités</div>
+            <div class="stat-value" id="activitesCount">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Indicateurs</div>
+            <div class="stat-value" id="indicateursCount">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Soumissions Kobo</div>
+            <div class="stat-value" id="koboCount">—</div>
+        </div>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Gestion des projets et suivi-évaluation
+    </h2>
+
+    <section class="modules">
+
+        <article class="card">
+            <div class="icon">📁</div>
+            <h3>Projets</h3>
+            <p>
+                Gestion des projets, bailleurs, budgets,
+                objectifs et zones d'intervention.
+            </p>
+            <a href="projets.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">👥</div>
+            <h3>Groupements</h3>
+            <p>
+                Gestion des groupements bénéficiaires,
+                effectifs et informations organisationnelles.
+            </p>
+            <a href="groupements.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">🧑‍🤝‍🧑</div>
+            <h3>Bénéficiaires</h3>
+            <p>
+                Gestion des bénéficiaires et
+                informations individuelles.
+            </p>
+            <a href="beneficiaires.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">📋</div>
+            <h3>Activités</h3>
+            <p>
+                Planification et suivi des activités
+                et de leurs participants.
+            </p>
+            <a href="activites.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">🎯</div>
+            <h3>Indicateurs</h3>
+            <p>
+                Gestion des indicateurs, cibles,
+                valeurs réalisées et reporting.
+            </p>
+            <a href="indicateurs.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">📊</div>
+            <h3>Suivi des indicateurs</h3>
+            <p>
+                Suivi des valeurs prévues, réalisées
+                et taux de réalisation.
+            </p>
+            <a href="suivi-indicateurs.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Collecte et données Kobo
+    </h2>
+
+    <section class="modules">
+
+        <article class="card kobo">
+
+            <div class="icon">📱</div>
+
+            <h3>Données Kobo</h3>
+
+            <p>
+                Gestion des formulaires KoboToolbox,
+                synchronisation et contrôle des soumissions.
+            </p>
+
+            <div
+                id="koboStatus"
+                class="status status-wait"
+            >
+                Vérification...
+            </div>
+
+            <br>
+
+            <a href="kobo.html" class="btn success">
+                Ouvrir Kobo
+            </a>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="icon">📥</div>
+
+            <h3>Soumissions Kobo</h3>
+
+            <p>
+                Consultation des soumissions importées
+                et contrôle des données.
+            </p>
+
+            <a href="kobo.html" class="btn primary">
+                Consulter
+            </a>
+
+        </article>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Administration et sécurité
+    </h2>
+
+    <section class="modules">
+
+        <article class="card users">
+
+            <div class="icon">👤</div>
+
+            <h3>Utilisateurs</h3>
+
+            <p>
+                Gestion des comptes utilisateurs,
+                rôles, statuts et accès.
+            </p>
+
+            <a href="utilisateurs.html" class="btn primary">
+                Gérer
+            </a>
+
+        </article>
+
+
+        <article class="card audit">
+
+            <div class="icon">🔐</div>
+
+            <h3>Journal d'audit</h3>
+
+            <p>
+                Traçabilité des actions administratives
+                effectuées sur la plateforme.
+            </p>
+
+            <a href="audit.html" class="btn secondary">
+                Consulter
+            </a>
+
+        </article>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Rapportage et capitalisation
+    </h2>
+
+    <section class="modules">
+
+        <article class="card">
+            <div class="icon">📄</div>
+            <h3>Rapports</h3>
+            <p>
+                Gestion des rapports et documents
+                de reporting des projets.
+            </p>
+            <a href="rapports.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">📚</div>
+            <h3>Documents</h3>
+            <p>
+                Centralisation et gestion des documents
+                institutionnels et projets.
+            </p>
+            <a href="documents.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">📰</div>
+            <h3>Publications</h3>
+            <p>
+                Gestion des publications et actualités
+                de l'organisation.
+            </p>
+            <a href="publications.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">🎥</div>
+            <h3>Médias</h3>
+            <p>
+                Gestion des photos, vidéos et autres
+                médias des activités.
+            </p>
+            <a href="medias.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Gestion opérationnelle
+    </h2>
+
+    <section class="modules">
+
+        <article class="card">
+            <div class="icon">💰</div>
+            <h3>Budget</h3>
+            <p>
+                Suivi des budgets, dépenses et écarts.
+            </p>
+            <a href="budget.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">🎓</div>
+            <h3>Formations</h3>
+            <p>
+                Gestion des formations réalisées
+                dans les projets.
+            </p>
+            <a href="formations.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">🚨</div>
+            <h3>Alertes</h3>
+            <p>
+                Suivi des alertes et actions
+                recommandées.
+            </p>
+            <a href="alertes.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+
+        <article class="card">
+            <div class="icon">📅</div>
+            <h3>Événements</h3>
+            <p>
+                Gestion des réunions, événements
+                et calendrier opérationnel.
+            </p>
+            <a href="evenements.html" class="btn primary">
+                Ouvrir
+            </a>
+        </article>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <strong>
+        AP2MD CONNECT PRO
+    </strong>
+
+    <span>
+        Développé par le département informatique de l’ONG AP2MD –
+        KOYAKELA Réginald le Miséricordieux
+    </span>
+
+</footer>
+
+
+<script>
+
+    const SUPABASE_URL =
+        "https://pturkucczqqioivapjcr.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_GO8o-jJp97DG0poviRApzQ_v3CgaqRT";
+
+
+    let supabaseClient = null;
+
+
+    function initializeSupabase() {
+
+        if (
+            typeof window.supabase === "undefined" ||
+            !window.supabase.createClient
+        ) {
+
+            console.error(
+                "La bibliothèque Supabase n'est pas chargée."
+            );
+
+            return false;
+        }
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+        return true;
+    }
+
+
+    async function verifySession() {
+
+        if (!supabaseClient) return false;
+
+        try {
+
+            const result =
+                await supabaseClient.auth.getSession();
+
+            if (
+                result.error ||
+                !result.data ||
+                !result.data.session
+            ) {
+
+                window.location.href = "./index.html";
+
+                return false;
+            }
+
+            return result.data.session;
+
+        } catch (error) {
+
+            console.error(
+                "Erreur session :",
+                error
+            );
+
+            window.location.href = "./index.html";
+
+            return false;
+        }
+    }
+
+
+    async function loadProfile(session) {
+
+        const name =
+            document.getElementById("userName");
+
+        const role =
+            document.getElementById("userRole");
+
+
+        if (!session) return;
+
+
+        name.textContent =
+            session.user.email || "Utilisateur";
+
+        role.textContent =
+            "Utilisateur connecté";
+
+
+        try {
+
+            const result =
+                await supabaseClient
+                    .from("user_profiles")
+                    .select(
+                        "full_name, role, status"
+                    )
+                    .eq(
+                        "id",
+                        session.user.id
+                    )
+                    .maybeSingle();
+
+
+            if (
+                result.error ||
+                !result.data
+            ) {
+                return;
+            }
+
+
+            if (result.data.full_name) {
+
+                name.textContent =
+                    result.data.full_name;
+            }
+
+
+            role.textContent =
+                formatRole(result.data.role);
+
+        } catch (error) {
+
+            console.error(
+                "Erreur profil :",
+                error
+            );
+        }
+    }
+
+
+    function formatRole(role) {
+
+        const roles = {
+
+            super_administrateur:
+                "Super Administrateur",
+
+            administrateur:
+                "Administrateur",
+
+            responsable_se:
+                "Responsable Suivi-Évaluation",
+
+            gestionnaire_projet:
+                "Gestionnaire de projet",
+
+            agent_terrain:
+                "Agent terrain",
+
+            utilisateur_autorise:
+                "Utilisateur autorisé"
+        };
+
+        return (
+            roles[role] ||
+            role ||
+            "Utilisateur"
+        );
+    }
+
+
+    async function safeCount(table, elementId) {
+
+        try {
+
+            const result =
+                await supabaseClient
+                    .from(table)
+                    .select(
+                        "*",
+                        {
+                            count: "exact",
+                            head: true
+                        }
+                    );
+
+
+            if (result.error) {
+
+                console.warn(
+                    "Impossible de compter " +
+                    table,
+                    result.error
+                );
+
+                document.getElementById(
+                    elementId
+                ).textContent = "—";
+
+                return;
+            }
+
+
+            document.getElementById(
+                elementId
+            ).textContent =
+                result.count ?? 0;
+
+        } catch (error) {
+
+            console.warn(
+                "Erreur compteur " + table,
+                error
+            );
+
+            document.getElementById(
+                elementId
+            ).textContent = "—";
+        }
+    }
+
+
+    async function loadKobo() {
+
+        const count =
+            document.getElementById(
+                "koboCount"
+            );
+
+        const status =
+            document.getElementById(
+                "koboStatus"
+            );
+
+
+        try {
+
+            const result =
+                await supabaseClient
+                    .from("collecte_kobo")
+                    .select(
+                        "submissions_count, sync_status"
+                    );
+
+
+            if (result.error) {
+
+                count.textContent = "—";
+
+                status.textContent =
+                    "Connexion Kobo à vérifier";
+
+                status.className =
+                    "status status-error";
+
+                return;
+            }
+
+
+            let total = 0;
+
+            (result.data || []).forEach(
+                function(row) {
+
+                    total += Number(
+                        row.submissions_count || 0
+                    );
+
+                }
+            );
+
+
+            count.textContent = total;
+
+
+            if (!result.data ||
+                result.data.length === 0) {
+
+                status.textContent =
+                    "Formulaire non configuré";
+
+                status.className =
+                    "status status-wait";
+
+                return;
+            }
+
+
+            status.textContent =
+                "Formulaire Kobo configuré";
+
+            status.className =
+                "status status-ok";
+
+        } catch (error) {
+
+            console.warn(
+                "Erreur Kobo :",
+                error
+            );
+
+            count.textContent = "—";
+
+            status.textContent =
+                "Vérification nécessaire";
+
+            status.className =
+                "status status-error";
+        }
+    }
+
+
+    async function loadDashboard() {
+
+        const button =
+            document.getElementById(
+                "refreshButton"
+            );
+
+        if (button) {
+
+            button.disabled = true;
+            button.textContent =
+                "Actualisation...";
+        }
+
+
+        try {
+
+            const session =
+                await verifySession();
+
+            if (!session) return;
+
+
+            await loadProfile(session);
+
+
+            /*
+             * Les statistiques sont chargées
+             * séparément afin qu'une erreur
+             * Supabase ne puisse pas rendre
+             * toute l'interface blanche.
+             */
+
+            await Promise.all([
+
+                safeCount(
+                    "projects",
+                    "projectsCount"
+                ),
+
+                safeCount(
+                    "groupements",
+                    "groupementsCount"
+                ),
+
+                safeCount(
+                    "beneficiaires",
+                    "beneficiairesCount"
+                ),
+
+                safeCount(
+                    "activites",
+                    "activitesCount"
+                ),
+
+                safeCount(
+                    "indicateurs",
+                    "indicateursCount"
+                ),
+
+                loadKobo()
+
+            ]);
+
+        } catch (error) {
+
+            console.error(
+                "Erreur dashboard :",
+                error
+            );
+
+        } finally {
+
+            if (button) {
+
+                button.disabled = false;
+                button.textContent =
+                    "Actualiser";
+            }
+        }
+    }
+
+
+    async function logout() {
+
+        try {
+
+            if (supabaseClient) {
+
+                await supabaseClient.auth.signOut();
+            }
+
+        } finally {
+
+            window.location.href =
+                "./index.html";
+        }
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async function() {
+
+            const ready =
+                initializeSupabase();
+
+            if (!ready) {
+
+                document.getElementById(
+                    "userName"
+                ).textContent =
+                    "Erreur de chargement";
+
+                return;
+            }
+
+
+            await loadDashboard();
+        }
+    );
+
+
+</script>
+
+</body>
+</html>
